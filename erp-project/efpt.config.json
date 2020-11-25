@@ -1,0 +1,57 @@
+﻿{
+   "ContextClassName": "Dev_MainContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": "Entities",
+   "OutputPath": "Entities\/Tables",
+   "ProjectRootNamespace": "erp_project",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[attribute]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[bindAttribute]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[bindGroupPrice]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[groupPrice]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[mainProduct]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[productStatus]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[productType]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[productUnit]"
+      }
+   ],
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseNodaTime": false,
+   "UseSpatial": false,
+   "UseStoredProcedures": false
+}

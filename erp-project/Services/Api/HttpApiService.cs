@@ -92,6 +92,7 @@ namespace erp_project.Library.Concretes
                 formDataContent.Add(new StreamContent(file.OpenReadStream()), file.Name, file.FileName);
             }
             httpRequest.Content = formDataContent;
+            foreach (var header in Headers) httpRequest.Headers.Add(header.Key, header.Value);
             var httpResponse = await Send<T>(httpRequest);
             return httpResponse;
         }
