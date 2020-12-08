@@ -16,5 +16,7 @@ namespace erp_project.Entities.Tables
         public string UnitCode { get; set; }
         [Required]
         public bool? Active { get; set; }
+        [Column("domainID")]
+        public int DomainId { get; set; }
     }
 }
