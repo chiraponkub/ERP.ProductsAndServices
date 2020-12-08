@@ -24,7 +24,11 @@ namespace erp_project.Controllers
             this.IProductAndService = IProductAndService;
         }
 
-
+        /// <summary>
+        /// สร้าง Unit 
+        /// </summary>
+        /// <param name="res"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("Unit")]
         public ActionResult Unit(m_unit_request res)
@@ -39,6 +43,12 @@ namespace erp_project.Controllers
             }
         }
 
+        /// <summary>
+        /// แก้ไข Unit
+        /// </summary>
+        /// <param name="unitId"></param>
+        /// <param name="res"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPut("editUnit")]
         public ActionResult editUnit(int unitId, m_unit_edit_request res)
@@ -53,6 +63,11 @@ namespace erp_project.Controllers
             }
         }
 
+        /// <summary>
+        /// ลบ Unit
+        /// </summary>
+        /// <param name="unitId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("delUnit")]
         public ActionResult delUnit(int unitId)
