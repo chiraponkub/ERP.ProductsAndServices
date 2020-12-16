@@ -19,5 +19,7 @@ namespace erp_project.Entities.Tables
         public int CurrencyCode { get; set; }
         [Column("sellingPriceDefault")]
         public bool SellingPriceDefault { get; set; }
+        [Column("domainId")]
+        public int DomainId { get; set; }
     }
 }

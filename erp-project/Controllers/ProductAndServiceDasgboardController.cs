@@ -23,6 +23,21 @@ namespace erp_project.Controllers
             this.IProductAndServiceDasgboard = IProductAndServiceDasgboard;
         }
 
+        [Authorize]
+        [HttpGet("PriceSetting")]
+        public IActionResult getPrice()
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         /// <summary>
         /// ดึงข้อมูล Unit ทั้งหมดของ Domain นั้น
         /// </summary>

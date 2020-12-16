@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Entities\Views\" />
-    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>

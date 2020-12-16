@@ -14,11 +14,11 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[productAndService].[attribute]"
+         "Name": "[productAndService].[attributeName]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[productAndService].[bindAttribute]"
+         "Name": "[productAndService].[attributeValue]"
       },
       {
          "HasPrimaryKey": true,
@@ -31,6 +31,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[productAndService].[mainProduct]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[productAndAttirbute]"
       },
       {
          "HasPrimaryKey": true,
