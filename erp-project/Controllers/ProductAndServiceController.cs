@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using erp_project.Entities;
 using erp_project.Libraries.Abstracts;
+using erp_project.Libraries.Models.ProductAndService;
 using erp_project.Libraries.Models.Unit;
+using erp_project.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace erp_project.Controllers
 {
@@ -18,10 +21,81 @@ namespace erp_project.Controllers
         private readonly DBConnect db;
         private readonly IProductAndService IProductAndService;
 
-        public ProductAndServiceController(DBConnect db , IProductAndService IProductAndService)
+        public ProductAndServiceController(DBConnect db, IProductAndService IProductAndService)
         {
             this.db = db;
             this.IProductAndService = IProductAndService;
+        }
+
+        /// <summary>
+        /// เพิ่ม ProductAndService
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("addProductAndService")]
+        public ActionResult AddProductAndService([FromForm] m_productandservice_main_request req)
+        {
+            try
+            {
+                string image;
+                string Attributeimage;
+                ERPHttpResponse<List<m_uploadimage>> p_image = new ERPHttpResponse<List<m_uploadimage>>();
+                ERPHttpResponse<List<m_uploadimage>> Listp_image = new ERPHttpResponse<List<m_uploadimage>>();
+                if (req.files != null && req.files.Count() > 0)
+                {
+                    if (req.files.Count() > 1)
+                        return BadRequest("ไม่สามารถอัพรูปโปรไฟล์ได้มากว่า 1 รูป");
+
+                    HttpService.Authorization(UserAuthorization);
+                    string host = Configuration.GetValue<string>("BE_HOST");
+                    p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", req.files).Result.Content;
+                    if (p_image.message != "Ok" || p_image.data.Count() != 1)
+                        return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
+                    image = p_image.data[0].fullPath;
+
+
+                    foreach (var m1 in req.attributeName)
+                    {
+                        foreach (var m2 in m1.Value)
+                        {
+                            Listp_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", m2.files).Result.Content;
+                            if (Listp_image.message != "Ok" || Listp_image.data.Count() != 1)
+                                return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
+                        }
+                    }
+                    Attributeimage = Listp_image.data[0].fullPath;
+                    //// ลบรูปเดิม
+                    //List<string> files = new List<string>();
+                    //files.Add(First.CompanyImg);
+                    //HttpService.Put($"{host}/rest-resource/api/Upload/RemoveImage", files);
+                    return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
+                }
+                return Ok(IProductAndService.addProductAndService(req, null, null));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// ลบ ProductAndService
+        /// </summary>
+        /// <param name="mainProductID"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("delPraductAndService")]
+        public ActionResult delProductAndService(int mainProductID) 
+        {
+            try
+            {
+                return Ok(IProductAndService.delProductAndService(mainProductID));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>

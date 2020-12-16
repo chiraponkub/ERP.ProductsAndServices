@@ -27,18 +27,6 @@ namespace erp_project.Entities
         {
 
             #region Tables (ตาราง)
-            modelBuilder.Entity<MainProduct>(entity =>
-            {
-                entity.HasKey(e => e.ProductId)
-                    .HasName("PK_product");
-
-                entity.Property(e => e.AttributeStatus).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.ProductAction).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.ProductActive).HasDefaultValueSql("((1))");
-            });
-
             modelBuilder.Entity<ProductUnit>(entity =>
             {
                 entity.Property(e => e.Active).HasDefaultValueSql("((1))");

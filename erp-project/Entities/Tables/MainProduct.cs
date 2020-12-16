@@ -10,33 +10,31 @@ namespace erp_project.Entities.Tables
     public partial class MainProduct
     {
         [Key]
-        [Column("productID")]
-        public int ProductId { get; set; }
+        [Column("mainProductID")]
+        public int MainProductId { get; set; }
         [Required]
         [Column("productName")]
         [StringLength(100)]
         public string ProductName { get; set; }
-        [Column("productTypeID")]
-        public int ProductTypeId { get; set; }
         [Column("productCode")]
         [StringLength(100)]
         public string ProductCode { get; set; }
-        [Column("productUnitID")]
-        public int? ProductUnitId { get; set; }
+        [Column("productTypeID")]
+        public int ProductTypeId { get; set; }
         [Column("productImage")]
         [StringLength(50)]
         public string ProductImage { get; set; }
+        [Column("productStatus")]
+        public bool ProductStatus { get; set; }
+        [Column("productUnitID")]
+        public int ProductUnitId { get; set; }
+        [Column("productActive")]
+        public bool ProductActive { get; set; }
         [Required]
-        [Column("attributeStatus")]
-        public bool? AttributeStatus { get; set; }
         [Column("description")]
         public string Description { get; set; }
-        [Required]
-        [Column("productAction")]
-        public bool? ProductAction { get; set; }
-        [Required]
-        [Column("productActive")]
-        public bool? ProductActive { get; set; }
+        [Column("productSellInfo")]
+        public int ProductSellInfo { get; set; }
         [Column("domainID")]
         public int DomainId { get; set; }
     }
