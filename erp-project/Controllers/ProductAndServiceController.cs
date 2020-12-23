@@ -27,6 +27,7 @@ namespace erp_project.Controllers
             this.IProductAndService = IProductAndService;
         }
 
+
         /// <summary>
         /// เพิ่ม ProductAndService
         /// </summary>
@@ -34,43 +35,43 @@ namespace erp_project.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("addProductAndService")]
-        public ActionResult AddProductAndService([FromForm] m_productandservice_main_request req)
+        public ActionResult AddProductAndService(m_productandservice_main_request req)
         {
             try
             {
                 string image;
                 string Attributeimage;
-                ERPHttpResponse<List<m_uploadimage>> p_image = new ERPHttpResponse<List<m_uploadimage>>();
-                ERPHttpResponse<List<m_uploadimage>> Listp_image = new ERPHttpResponse<List<m_uploadimage>>();
-                if (req.files != null && req.files.Count() > 0)
-                {
-                    if (req.files.Count() > 1)
-                        return BadRequest("ไม่สามารถอัพรูปโปรไฟล์ได้มากว่า 1 รูป");
+                //ERPHttpResponse<List<m_uploadimage>> p_image = new ERPHttpResponse<List<m_uploadimage>>();
+                //ERPHttpResponse<List<m_uploadimage>> Listp_image = new ERPHttpResponse<List<m_uploadimage>>();
+                //if (req.files != null && req.files.Count() > 0)
+                //{
+                //    if (req.files.Count() > 1)
+                //        return BadRequest("ไม่สามารถอัพรูปโปรไฟล์ได้มากว่า 1 รูป");
 
-                    HttpService.Authorization(UserAuthorization);
-                    string host = Configuration.GetValue<string>("BE_HOST");
-                    p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", req.files).Result.Content;
-                    if (p_image.message != "Ok" || p_image.data.Count() != 1)
-                        return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
-                    image = p_image.data[0].fullPath;
+                //    HttpService.Authorization(UserAuthorization);
+                //    string host = Configuration.GetValue<string>("BE_HOST");
+                //    p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", req.files).Result.Content;
+                //    if (p_image.message != "Ok" || p_image.data.Count() != 1)
+                //        return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
+                //    image = p_image.data[0].fullPath;
 
 
-                    foreach (var m1 in req.attributeName)
-                    {
-                        foreach (var m2 in m1.Value)
-                        {
-                            Listp_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", m2.files).Result.Content;
-                            if (Listp_image.message != "Ok" || Listp_image.data.Count() != 1)
-                                return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
-                        }
-                    }
-                    Attributeimage = Listp_image.data[0].fullPath;
+                    //foreach (var m1 in req.attributeName)
+                    //{
+                    //    foreach (var m2 in m1.Value)
+                    //    {
+                    //        Listp_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", m2.files).Result.Content;
+                    //        if (Listp_image.message != "Ok" || Listp_image.data.Count() != 1)
+                    //            return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
+                    //    }
+                    //}
+                    //Attributeimage = Listp_image.data[0].fullPath;
                     //// ลบรูปเดิม
                     //List<string> files = new List<string>();
                     //files.Add(First.CompanyImg);
                     //HttpService.Put($"{host}/rest-resource/api/Upload/RemoveImage", files);
-                    return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
-                }
+                //    return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
+                //}
                 return Ok(IProductAndService.addProductAndService(req, null, null));
             }
             catch (Exception ex)
@@ -82,21 +83,23 @@ namespace erp_project.Controllers
         /// <summary>
         /// ลบ ProductAndService
         /// </summary>
-        /// <param name="mainProductID"></param>
+        /// <param name="ProductID"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpDelete("delPraductAndService")]
-        public ActionResult delProductAndService(int mainProductID) 
+        [HttpDelete("delPraductAndService{ProductID}")]
+        public ActionResult delProductAndService(int ProductID) 
         {
             try
             {
-                return Ok(IProductAndService.delProductAndService(mainProductID));
+                return Ok(IProductAndService.delProductAndService(ProductID));
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+        
 
         /// <summary>
         /// สร้าง Unit 

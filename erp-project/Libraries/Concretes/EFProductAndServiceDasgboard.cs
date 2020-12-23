@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using erp_project.Middlewares;
+using erp_project.Libraries.Models.ProductAndService;
 
 namespace erp_project.Libraries.Concretes
 {
@@ -15,6 +17,54 @@ namespace erp_project.Libraries.Concretes
         public EFProductAndServiceDasgboard(DBConnect db)
         {
             this.db = db;
+        }
+
+        public List<m_productandservice_response> GetProdtuct(
+            int domainId,
+            int StatusId,
+            int Type,
+            string ProductCode,
+            string ProductName,
+            string Description,
+            int Unit,
+            decimal Above,
+            decimal Below,
+            decimal Between
+            )
+        {
+            List<m_productandservice_response> models = new List<m_productandservice_response>();
+            var Products = db.Products.Where(f => f.DomianId == domainId);
+
+            var select = (
+                from p in Products
+                where p.ProductStatusId.ToString().Contains(StatusId.ToString()) 
+                || p.ProductTypeId.ToString().Contains(Type.ToString())
+                || p.ProductCode.Contains(ProductCode)
+                || p.ProductDescription.Contains(Description)
+                || p.ProductUntiId.ToString().Contains(Unit.ToString())
+                || p.ProductPrice >= Above 
+                || p.ProductPrice <= Below
+                && p.ProductPrice >= Between && p.ProductPrice <= Between
+                select new m_productandservice_response() 
+                { 
+                    productStatusId = p.ProductStatusId
+                }).ToList();
+            
+            foreach (var m1 in select)
+            {
+                models.Add(new m_productandservice_response
+                {
+                    productId = m1.productId,
+                    productStatusId = m1.productStatusId,
+                    productTypeId = m1.productTypeId,
+                    productCode = m1.productCode,
+                    productName = m1.productName,
+                    productDescription = m1.productDescription,
+                    productUntiId = m1.productUntiId,
+                    productPrice = m1.productPrice
+                });
+            }
+            return models;
         }
 
         public List<m_unit_response> getunit(int domainID)

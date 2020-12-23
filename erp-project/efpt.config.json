@@ -14,14 +14,6 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[productAndService].[attributeName]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[attributeValue]"
-      },
-      {
-         "HasPrimaryKey": true,
          "Name": "[productAndService].[bindGroupPrice]"
       },
       {
@@ -30,11 +22,23 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[productAndService].[mainProduct]"
+         "Name": "[productAndService].[ProductAddonDetails]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[productAndService].[productAndAttirbute]"
+         "Name": "[productAndService].[ProductAddons]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[ProductAttributes]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[ProductAttributeValues]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[Products]"
       },
       {
          "HasPrimaryKey": true,

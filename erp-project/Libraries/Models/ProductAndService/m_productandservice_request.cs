@@ -13,33 +13,38 @@ namespace erp_project.Libraries.Models.ProductAndService
 
     public class m_productandservice_main_request
     {
-        public string productName { get; set; }
         public string productCode { get; set; }
-        public int productTypeID { get; set; }
-        public List<IFormFile> files { get; set; }
-        public bool attributeStatus { get; set; }
-        public int productUnitId { get; set; }
-        public string description { get; set; }
-        public int SellInfo { get; set; }
+        public string productName { get; set; }
+        public int productTypeId { get; set; }
+        public string productDescription { get; set; }
+        public int productPrice { get; set; }
+        //public List<IFormFile> files { get; set; }
+        public int productUntiId { get; set; }
+        public int productStatusId { get; set; }
         public int domainId { get; set; }
-        public List<m_productandservice_attributeName_request> attributeName { get; set; }
+        public bool productActive { get; set; }
+        public List<m_productandservice_attributeName_request> attribute { get; set; }
+        public List<m_productandservice_Addon_request> addon { get; set; }
     }
 
     public class m_productandservice_attributeName_request
     {
-        public int attributeNameId { get; set; }
-        public string attributeName { get; set; }
-        public List<m_productandservice_AttributeValue_request> Value { get; set; }
+        public string attibuteName { get; set; }
+        public List<m_productandservice_AttributeValue_request> value { get; set; }
     }
 
-    public class m_productandservice_AttributeValue_request 
+    public class m_productandservice_AttributeValue_request
     {
-        public int attributeValueID { get; set; }
-        public string AttributeValueName { get; set; }
-        public List<IFormFile> files { get; set; }
-        public bool Active { get; set; }
-        public int SellingPrice { get; set; }
-        public string Description { get; set; }
+        public string valueName { get; set; }
+    }
+
+    public class m_productandservice_Addon_request
+    {
+        //public List<IFormFile> files { get; set; }
+        public string valueDescription { get; set; }
+        public int price { get; set; }
+        public bool status { get; set; }
+        public string productCodeOnValue { get; set; }
     }
 
     public class m_uploadimage
