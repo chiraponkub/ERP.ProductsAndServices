@@ -17,12 +17,64 @@ namespace erp_project.Controllers
         private readonly DBConnect db;
         private readonly IProductAndServiceDasgboard IProductAndServiceDasgboard;
 
-        public ProductAndServiceDasgboardController(DBConnect db , IProductAndServiceDasgboard IProductAndServiceDasgboard)
+        public ProductAndServiceDasgboardController(DBConnect db, IProductAndServiceDasgboard IProductAndServiceDasgboard)
         {
             this.db = db;
             this.IProductAndServiceDasgboard = IProductAndServiceDasgboard;
         }
 
+        /// <summary>
+        /// ดึงข้อมูล ProductAndService
+        /// </summary>
+        /// <param name="domainId"></param>
+        /// <param name="StatusId"></param>
+        /// <param name="Type"></param>
+        /// <param name="ProductCode"></param>
+        /// <param name="ProductName"></param>
+        /// <param name="Description"></param>
+        /// <param name="Unit"></param>
+        /// <param name="Above"></param>
+        /// <param name="Below"></param>
+        /// <param name="Between"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("Dasgboard{domainId}")]
+        public ActionResult getproduct(
+            int domainId,
+            int StatusId,
+            int Type,
+            string ProductCode,
+            string ProductName,
+            string Description,
+            int Unit,
+            decimal Above,
+            decimal Below,
+            decimal Between
+            )
+        {
+            try
+            {
+                return Ok(IProductAndServiceDasgboard.GetProdtuct(domainId,
+                    StatusId,
+                    Type,
+                    ProductCode,
+                    ProductName,
+                    Description,
+                    Unit,
+                    Above,
+                    Below,
+                    Between));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("PriceSetting")]
         public IActionResult getPrice()
@@ -75,5 +127,5 @@ namespace erp_project.Controllers
                 return BadRequest(ex.Message);
             }
         }
-    } 
+    }
 }
