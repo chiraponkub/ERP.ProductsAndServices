@@ -26,30 +26,28 @@ namespace erp_project.Controllers
         /// <summary>
         /// ดึงข้อมูล ProductAndService
         /// </summary>
-        /// <param name="domainId"></param>
-        /// <param name="StatusId"></param>
-        /// <param name="Type"></param>
-        /// <param name="ProductCode"></param>
-        /// <param name="ProductName"></param>
-        /// <param name="Description"></param>
-        /// <param name="Unit"></param>
-        /// <param name="Above"></param>
-        /// <param name="Below"></param>
-        /// <param name="Between"></param>
+        /// <param name="domainId">ส่ง DomainId</param>
+        /// <param name="StatusId">ส่ง ProductStatusId</param>
+        /// <param name="Type">ส่ง ProdcutTypeId</param>
+        /// <param name="ProductCode">ส่ง ProductCode</param>
+        /// <param name="ProductName">ชื่อสินค้า</param>
+        /// <param name="Description">รายละเอียดสินค้า</param>
+        /// <param name="Unit">ส่ง UnitId</param>
+        /// <param name="Above">ราคามากกว่า</param>
+        /// <param name="Below">ราคาน้อยกว่า</param>
         /// <returns></returns>
         [Authorize]
         [HttpGet("Dasgboard{domainId}")]
         public ActionResult getproduct(
-            int domainId,
-            int StatusId,
-            int Type,
+            string domainId,
+            string StatusId,
+            string Type,
             string ProductCode,
             string ProductName,
             string Description,
-            int Unit,
-            decimal Above,
-            decimal Below,
-            decimal Between
+            string Unit,
+            decimal? Above,
+            decimal? Below
             )
         {
             try
@@ -62,8 +60,8 @@ namespace erp_project.Controllers
                     Description,
                     Unit,
                     Above,
-                    Below,
-                    Between));
+                    Below
+                    ));
             }
             catch (Exception ex)
             {
@@ -72,7 +70,7 @@ namespace erp_project.Controllers
         }
 
         /// <summary>
-        /// 
+        /// ยังไม่เสร็จ
         /// </summary>
         /// <returns></returns>
         [Authorize]

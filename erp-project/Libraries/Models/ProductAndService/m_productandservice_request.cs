@@ -47,6 +47,14 @@ namespace erp_project.Libraries.Models.ProductAndService
         public string productCodeOnValue { get; set; }
     }
 
+    public class m_ProductAttributeValueModels
+    {
+        public int AttributeId { get; set; }
+        public int ValueId { get; set; }
+        public string ValueName { get; set; }
+        public string AttibuteName { get; set; }
+    }
+
     public class m_uploadimage
     {
         /// <summary>

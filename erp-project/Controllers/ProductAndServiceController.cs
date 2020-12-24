@@ -29,7 +29,7 @@ namespace erp_project.Controllers
 
 
         /// <summary>
-        /// เพิ่ม ProductAndService
+        /// เพิ่ม ProductAndService (ยังไม่สามารถเพิ่มรูปภาพได้)
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>

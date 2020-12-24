@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using erp_project.Middlewares;
 using erp_project.Libraries.Models.ProductAndService;
+using Microsoft.EntityFrameworkCore;
 
 namespace erp_project.Libraries.Concretes
 {
@@ -20,49 +21,148 @@ namespace erp_project.Libraries.Concretes
         }
 
         public List<m_productandservice_response> GetProdtuct(
-            int domainId,
-            int StatusId,
-            int Type,
+            string domainId,
+            string StatusId,
+            string Type,
             string ProductCode,
             string ProductName,
             string Description,
-            int Unit,
-            decimal Above,
-            decimal Below,
-            decimal Between
+            string Unit,
+            decimal? Above,
+            decimal? Below
             )
         {
             List<m_productandservice_response> models = new List<m_productandservice_response>();
-            var Products = db.Products.Where(f => f.DomianId == domainId);
-
-            var select = (
-                from p in Products
-                where p.ProductStatusId.ToString().Contains(StatusId.ToString()) 
-                || p.ProductTypeId.ToString().Contains(Type.ToString())
-                || p.ProductCode.Contains(ProductCode)
-                || p.ProductDescription.Contains(Description)
-                || p.ProductUntiId.ToString().Contains(Unit.ToString())
-                || p.ProductPrice >= Above 
-                || p.ProductPrice <= Below
-                && p.ProductPrice >= Between && p.ProductPrice <= Between
-                select new m_productandservice_response() 
-                { 
-                    productStatusId = p.ProductStatusId
-                }).ToList();
-            
-            foreach (var m1 in select)
+            var Products = db.Products.Where(f => f.DomianId.ToString() == domainId);
+            if (
+                string.IsNullOrEmpty(StatusId)
+                && string.IsNullOrEmpty(Type)
+                && string.IsNullOrEmpty(ProductCode)
+                && string.IsNullOrEmpty(ProductName)
+                && string.IsNullOrEmpty(Description)
+                && string.IsNullOrEmpty(Unit)
+                && Above == null
+                && Below == null
+                )
             {
-                models.Add(new m_productandservice_response
+                var res = Products.ToList();
+                foreach (var m1 in res)
                 {
-                    productId = m1.productId,
-                    productStatusId = m1.productStatusId,
-                    productTypeId = m1.productTypeId,
-                    productCode = m1.productCode,
-                    productName = m1.productName,
-                    productDescription = m1.productDescription,
-                    productUntiId = m1.productUntiId,
-                    productPrice = m1.productPrice
-                });
+                    models.Add(new m_productandservice_response
+                    {
+                        productId = m1.ProductId,
+                        productStatusId = m1.ProductStatusId,
+                        productTypeId = m1.ProductTypeId,
+                        productCode = m1.ProductCode,
+                        productName = m1.ProductName,
+                        productDescription = m1.ProductDescription,
+                        productUntiId = m1.ProductUntiId,
+                        productPrice = m1.ProductPrice
+                    });
+                }
+            }
+            else if (Above == null && Below == null)
+            {
+                var res = Products.Where(w =>
+                w.ProductStatusId.ToString().Contains(StatusId)
+                || w.ProductTypeId.ToString().Contains(Type)
+                || w.ProductCode.Contains(ProductCode)
+                || w.ProductName.Contains(ProductName)
+                || w.ProductDescription.Contains(Description)
+                || w.ProductUntiId.ToString().Contains(Unit)
+                ).ToList();
+                foreach (var m1 in res)
+                {
+                    models.Add(new m_productandservice_response
+                    {
+                        productId = m1.ProductId,
+                        productStatusId = m1.ProductStatusId,
+                        productTypeId = m1.ProductTypeId,
+                        productCode = m1.ProductCode,
+                        productName = m1.ProductName,
+                        productDescription = m1.ProductDescription,
+                        productUntiId = m1.ProductUntiId,
+                        productPrice = m1.ProductPrice
+                    });
+                }
+            }
+            else
+            {
+                if (Above != null && Below == null)
+                {
+                    var res = Products.Where(w => w.ProductPrice >= Above)
+                        .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
+                        || w.ProductTypeId.ToString().Contains(Type)
+                        || w.ProductCode.Contains(ProductCode)
+                        || w.ProductName.Contains(ProductName)
+                        || w.ProductDescription.Contains(Description)
+                        || w.ProductUntiId.ToString().Contains(Unit))
+                        .ToList();
+                    foreach (var m1 in res)
+                    {
+                        models.Add(new m_productandservice_response
+                        {
+                            productId = m1.ProductId,
+                            productStatusId = m1.ProductStatusId,
+                            productTypeId = m1.ProductTypeId,
+                            productCode = m1.ProductCode,
+                            productName = m1.ProductName,
+                            productDescription = m1.ProductDescription,
+                            productUntiId = m1.ProductUntiId,
+                            productPrice = m1.ProductPrice
+                        });
+                    }
+                }
+                else if (Below != null && Above == null)
+                {
+                    var res = Products.Where(w => w.ProductPrice <= Below)
+                        .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
+                        || w.ProductTypeId.ToString().Contains(Type)
+                        || w.ProductCode.Contains(ProductCode)
+                        || w.ProductName.Contains(ProductName)
+                        || w.ProductDescription.Contains(Description)
+                        || w.ProductUntiId.ToString().Contains(Unit))
+                        .ToList();
+                    foreach (var m1 in res)
+                    {
+                        models.Add(new m_productandservice_response
+                        {
+                            productId = m1.ProductId,
+                            productStatusId = m1.ProductStatusId,
+                            productTypeId = m1.ProductTypeId,
+                            productCode = m1.ProductCode,
+                            productName = m1.ProductName,
+                            productDescription = m1.ProductDescription,
+                            productUntiId = m1.ProductUntiId,
+                            productPrice = m1.ProductPrice
+                        });
+                    }
+                }
+                else
+                {
+                    var res = Products.Where(w => w.ProductPrice >= Above && w.ProductPrice <= Below)
+                        .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
+                        || w.ProductTypeId.ToString().Contains(Type)
+                        || w.ProductCode.Contains(ProductCode)
+                        || w.ProductName.Contains(ProductName)
+                        || w.ProductDescription.Contains(Description)
+                        || w.ProductUntiId.ToString().Contains(Unit))
+                        .ToList();
+                    foreach (var m1 in res)
+                    {
+                        models.Add(new m_productandservice_response
+                        {
+                            productId = m1.ProductId,
+                            productStatusId = m1.ProductStatusId,
+                            productTypeId = m1.ProductTypeId,
+                            productCode = m1.ProductCode,
+                            productName = m1.ProductName,
+                            productDescription = m1.ProductDescription,
+                            productUntiId = m1.ProductUntiId,
+                            productPrice = m1.ProductPrice
+                        });
+                    }
+                }
             }
             return models;
         }
