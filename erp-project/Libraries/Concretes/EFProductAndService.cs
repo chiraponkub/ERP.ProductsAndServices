@@ -163,13 +163,7 @@ namespace erp_project.Libraries.Concretes
             }
         }
 
-        public class m_ProductAttributeValueModels
-        {
-            public int AttributeId { get; set; }
-            public int ValueId { get; set; }
-            public string ValueName { get; set; }
-            public string AttibuteName { get; set; }
-        }
+        
 
         public bool delProductAndService(int ProductID)
         {
@@ -205,6 +199,8 @@ namespace erp_project.Libraries.Concretes
                 }
             }
         }
+
+
 
         public bool unit(m_unit_request res)
         {
