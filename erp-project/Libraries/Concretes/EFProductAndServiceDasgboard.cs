@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using erp_project.Middlewares;
 using erp_project.Libraries.Models.ProductAndService;
 using Microsoft.EntityFrameworkCore;
+using erp_project.Libraries.Models.PriceSetting;
+using erp_project.Entities.Tables;
 
 namespace erp_project.Libraries.Concretes
 {
@@ -164,6 +166,36 @@ namespace erp_project.Libraries.Concretes
                     }
                 }
             }
+            return models;
+        }
+
+
+        public List<m_priceSetting_response> getprice(int domainId)
+        {
+            
+            var res = db.GroupPrice.Where(w => w.DomainId == domainId && w.Active == true).ToList();
+            List<m_priceSetting_response> models = new List<m_priceSetting_response>();
+            foreach (var m1 in res)
+            {
+                models.Add(new m_priceSetting_response
+                {
+                    groupPriceID = m1.GroupPriceId,
+                    priceName = m1.PriceName,
+                    currencyCode = m1.CurrencyCode,
+                    sellingPriceDefault = m1.SellingPriceDefault
+                });
+            }
+            return models;
+        }
+
+        public m_priceSetting_response_edit getEditPrice(int groupPriceID)
+        {
+            var res = db.GroupPrice.Where(w => w.Active == true).FirstOrDefault(f => f.GroupPriceId == groupPriceID);
+            if (res == null)
+                throw new Exception("No ID!!!");
+            m_priceSetting_response_edit models = new m_priceSetting_response_edit();
+            models.groupPriceID = res.GroupPriceId;
+            models.priceName = res.PriceName;
             return models;
         }
 

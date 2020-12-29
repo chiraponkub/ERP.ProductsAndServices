@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using erp_project.Entities;
+using erp_project.Entities.Tables;
 using erp_project.Libraries.Abstracts;
+using erp_project.Libraries.Models.PriceSetting;
+using erp_project.Library.Concretes;
+using erp_project.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace erp_project.Controllers
 {
@@ -70,16 +75,62 @@ namespace erp_project.Controllers
         }
 
         /// <summary>
-        /// ยังไม่เสร็จ
+        /// ดึงข้อมูล Price มาแสดง
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("PriceSetting")]
-        public IActionResult getPrice()
+        [HttpGet("getPrice{domainId}")]
+        public IActionResult getPrice(int domainId)
         {
             try
             {
-                return Ok();
+                string Token = UserAuthorization;
+                string host = Configuration.GetValue<string>("BE_HOST");
+                var httpservice = new HttpApiService();
+                httpservice.Authorization(Token);
+                Domain dos = new Domain();
+                var getdomain = httpservice.Get<ERPHttpResponse<Domain>>($"{host}/rest-account/api/Domain/GetDomainById?domainId={domainId}").Result.Content;
+                var Find = db.GroupPrice.Where(w => w.SellingPriceDefault == true && w.DomainId == domainId).FirstOrDefault();
+                if (Find == null)
+                {
+                    var save = new GroupPrice
+                    {
+                        PriceName = "Standard",
+                        CurrencyCode = getdomain.data.primaryCurrencyId,
+                        DomainId = domainId,
+                        SellingPriceDefault = true
+                    };
+                    db.GroupPrice.Add(save);
+                    db.SaveChanges();
+                }
+                return Ok(IProductAndServiceDasgboard.getprice(domainId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        public class PrimaryCurrency
+        {
+            public int PrimaryCurrencyId { get; set; }
+            public string PrimaryCurrencycode { get; set; }
+            public string PrimaryCurrencyNameEn { get; set; }
+            public string PrimaryCurrencyNameTh { get; set; }
+        }
+
+        /// <summary>
+        /// ดึงข้อมูล Price มาแก้ไข
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("getEditPrice{GroupPriceId}")]
+        public IActionResult getEditPrice(int GroupPriceId)
+        {
+            try
+            {
+                return Ok(IProductAndServiceDasgboard.getEditPrice(GroupPriceId));
             }
             catch (Exception ex)
             {

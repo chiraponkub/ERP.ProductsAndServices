@@ -72,7 +72,9 @@ namespace erp_project.Library.Concretes
             var formDataContent = new MultipartFormDataContent();
             foreach (var file in files)
             {
-                formDataContent.Add(new StreamContent(file.OpenReadStream()), file.Name, file.FileName);
+                var content = new StreamContent(file.OpenReadStream());
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                formDataContent.Add(content, file.Name, file.FileName);
             }
             httpRequest.Content = formDataContent;
             var httpResponse = await Send(httpRequest);
@@ -89,9 +91,13 @@ namespace erp_project.Library.Concretes
             var formDataContent = new MultipartFormDataContent();
             foreach (var file in files)
             {
-                formDataContent.Add(new StreamContent(file.OpenReadStream()), file.Name, file.FileName);
+                var content = new StreamContent(file.OpenReadStream());
+                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                formDataContent.Add(content, file.Name, file.FileName);
+
             }
             httpRequest.Content = formDataContent;
+
             foreach (var header in Headers) httpRequest.Headers.Add(header.Key, header.Value);
             var httpResponse = await Send<T>(httpRequest);
             return httpResponse;
@@ -182,5 +188,7 @@ namespace erp_project.Library.Concretes
             }
             return returnResponse;
         }
+
+
     }
 }

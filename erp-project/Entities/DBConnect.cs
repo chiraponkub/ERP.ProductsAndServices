@@ -31,6 +31,16 @@ namespace erp_project.Entities
         {
 
             #region Tables (ตาราง)
+            modelBuilder.Entity<BindGroupPrice>(entity =>
+            {
+                entity.Property(e => e.Active).HasDefaultValueSql("((1))");
+            });
+
+            modelBuilder.Entity<GroupPrice>(entity =>
+            {
+                entity.Property(e => e.Active).HasDefaultValueSql("((1))");
+            });
+
             modelBuilder.Entity<ProductAddonDetails>(entity =>
             {
                 entity.HasKey(e => new { e.AddonId, e.AttributeId, e.ValueId });
