@@ -1,6 +1,7 @@
 ﻿using erp_project.Entities;
 using erp_project.Entities.Tables;
 using erp_project.Libraries.Abstracts;
+using erp_project.Libraries.Models.PriceSetting;
 using erp_project.Libraries.Models.ProductAndService;
 using erp_project.Libraries.Models.Unit;
 using erp_project.Middlewares;
@@ -162,9 +163,6 @@ namespace erp_project.Libraries.Concretes
                 }
             }
         }
-
-        
-
         public bool delProductAndService(int ProductID)
         {
             using (var Transaction = db.Database.BeginTransaction())
@@ -199,8 +197,85 @@ namespace erp_project.Libraries.Concretes
                 }
             }
         }
+        public bool addPrice(m_priceSetting_request req)
+        {
+            using (var Transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var check = db.GroupPrice.Where(w => w.DomainId == req.domainID).ToList();
+                    foreach (var m1 in check)
+                    {
+                        if (m1.PriceName == req.priceName && m1.CurrencyCode == req.currencyCode)
+                        {
+                            throw new Exception("ชื่อซ้ำกับชื่อราคาซ้ำ");
+                        } 
+                    }
+                    var save = db.GroupPrice.Add(new GroupPrice
+                    {
+                        PriceName = req.priceName,
+                        CurrencyCode = req.currencyCode,
+                        DomainId = req.domainID
+                    });
+                    db.SaveChanges();
+                    Transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Transaction.Rollback();
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
 
+        public bool editPrice(int GroupPriceId, m_priceSetting_request_edti req)
+        {
+            using (var Transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var save = db.GroupPrice.FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
+                    if (save == null)
+                    {
+                        throw new Exception("Error Id Fales");
+                    }
+                    save.PriceName = req.priceName;
+                    db.SaveChanges();
+                    Transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Transaction.Rollback();
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
 
+        public bool delPrice(int GroupPriceId)
+        {
+            using (var Transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var save = db.GroupPrice.FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
+                    if (save == null)
+                    {
+                        throw new Exception("Error Id Fales");
+                    }
+                    save.Active = false;
+                    db.SaveChanges();
+                    Transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Transaction.Rollback();
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
 
         public bool unit(m_unit_request res)
         {
@@ -213,7 +288,6 @@ namespace erp_project.Libraries.Concretes
             db.SaveChanges();
             return true;
         }
-
         public bool editunit(int untiId, m_unit_edit_request res)
         {
             var Find = db.ProductUnit.FirstOrDefault(f => f.ProductUnitId == untiId);
@@ -225,7 +299,6 @@ namespace erp_project.Libraries.Concretes
             db.SaveChanges();
             return true;
         }
-
         public bool delunit(int untiId)
         {
             var Find = db.ProductUnit.FirstOrDefault(f => f.ProductUnitId == untiId);

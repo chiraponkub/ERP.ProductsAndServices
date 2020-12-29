@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using erp_project.Entities;
 using erp_project.Libraries.Abstracts;
+using erp_project.Libraries.Models.PriceSetting;
 using erp_project.Libraries.Models.ProductAndService;
 using erp_project.Libraries.Models.Unit;
 using erp_project.Services.Models;
@@ -56,20 +57,20 @@ namespace erp_project.Controllers
                 //    image = p_image.data[0].fullPath;
 
 
-                    //foreach (var m1 in req.attributeName)
-                    //{
-                    //    foreach (var m2 in m1.Value)
-                    //    {
-                    //        Listp_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", m2.files).Result.Content;
-                    //        if (Listp_image.message != "Ok" || Listp_image.data.Count() != 1)
-                    //            return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
-                    //    }
-                    //}
-                    //Attributeimage = Listp_image.data[0].fullPath;
-                    //// ลบรูปเดิม
-                    //List<string> files = new List<string>();
-                    //files.Add(First.CompanyImg);
-                    //HttpService.Put($"{host}/rest-resource/api/Upload/RemoveImage", files);
+                //foreach (var m1 in req.attributeName)
+                //{
+                //    foreach (var m2 in m1.Value)
+                //    {
+                //        Listp_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", m2.files).Result.Content;
+                //        if (Listp_image.message != "Ok" || Listp_image.data.Count() != 1)
+                //            return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
+                //    }
+                //}
+                //Attributeimage = Listp_image.data[0].fullPath;
+                //// ลบรูปเดิม
+                //List<string> files = new List<string>();
+                //files.Add(First.CompanyImg);
+                //HttpService.Put($"{host}/rest-resource/api/Upload/RemoveImage", files);
                 //    return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
                 //}
                 return Ok(IProductAndService.addProductAndService(req, null, null));
@@ -87,7 +88,7 @@ namespace erp_project.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpDelete("delPraductAndService{ProductID}")]
-        public ActionResult delProductAndService(int ProductID) 
+        public ActionResult delProductAndService(int ProductID)
         {
             try
             {
@@ -99,7 +100,64 @@ namespace erp_project.Controllers
             }
         }
 
-        
+        /// <summary>
+        /// เพิ่ม PriceSetting
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("addPrice")]
+        public ActionResult PriceSetting(m_priceSetting_request req)
+        {
+            try
+            {
+                return Ok(IProductAndService.addPrice(req));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// แก้ไข PriceSettingName
+        /// </summary>
+        /// <param name="GroupPriceId"></param>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("EditPrice{GroupPriceId}")]
+        public ActionResult EditPrice(int GroupPriceId, m_priceSetting_request_edti req)
+        {
+            try
+            {
+                return Ok(IProductAndService.editPrice(GroupPriceId,req));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// ลบ PriceSettingName
+        /// </summary>
+        /// <param name="GroupPriceId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("DeltPrice{GroupPriceId}")]
+        public ActionResult DeltPrice(int GroupPriceId)
+        {
+            try
+            {
+                return Ok(IProductAndService.delPrice(GroupPriceId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         /// <summary>
         /// สร้าง Unit 

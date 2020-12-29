@@ -10,13 +10,15 @@ namespace erp_project.Entities.Tables
     public partial class BindGroupPrice
     {
         [Key]
-        [Column("sellingPriceID")]
-        public int SellingPriceId { get; set; }
-        [Column("sellingPrice")]
-        public int? SellingPrice { get; set; }
-        [Column("productID")]
-        public int ProductId { get; set; }
+        [Column("bindGroupPriceID")]
+        public int BindGroupPriceId { get; set; }
         [Column("groupPriceID")]
         public int GroupPriceId { get; set; }
+        [Column("addonID")]
+        public int AddonId { get; set; }
+        [Column("domainId")]
+        public int DomainId { get; set; }
+        [Required]
+        public bool? Active { get; set; }
     }
 }
