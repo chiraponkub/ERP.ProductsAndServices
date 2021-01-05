@@ -35,7 +35,7 @@ namespace erp_project.Libraries.Concretes
             )
         {
             List<m_productandservice_response> models = new List<m_productandservice_response>();
-            var Products = db.Products.Where(f => f.DomianId.ToString() == domainId);
+            var Products = db.Products.Where(f => f.DomainId.ToString() == domainId);
             if (
                 string.IsNullOrEmpty(StatusId)
                 && string.IsNullOrEmpty(Type)
@@ -169,10 +169,64 @@ namespace erp_project.Libraries.Concretes
             return models;
         }
 
+        public List<m_priceSetting_GetDataPrice_response> GetDataPrice(
+            int domainId, 
+            int GroupPriceId,
+            string Type,
+            string ProductCode,
+            string ProductName,
+            string Attribute,
+            string Description,
+            string Unit,
+            decimal? Above,
+            decimal? Below
+            )
+        {
+            var addon = db.ProductAddons;
+            var product = db.Products;
+            var groupPrice = db.GroupPrice.FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
+            var DataAddon = db.GetDataAddon.Where(w => w.DomainId == domainId).ToList();
+
+            foreach (var m1 in DataAddon)
+            {
+                var check = db.BindGroupPrice.Where(w => w.AddonId == m1.AddonId && w.GroupPriceId == GroupPriceId && w.Active == true && w.DomainId == domainId).FirstOrDefault();
+                if (check == null)
+                {
+                    var save = new BindGroupPrice
+                    {
+                        AddonId = m1.AddonId,
+                        GroupPriceId = GroupPriceId,
+                        DomainId = domainId,
+                        Price = m1.AddonPrice,
+                        Active = true
+                    };
+                    db.BindGroupPrice.Add(save);
+                    db.SaveChanges();
+                }
+            }
+
+            var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId).ToList();
+            var show = (from b in BindGroupPrice
+                        join a in DataAddon on b.AddonId equals a.AddonId
+                        select new m_priceSetting_GetDataPrice_response
+                        {
+                            ProductAttributeId = b.AddonId,
+                            productType = a.ProductTypeName,
+                            productCode = a.ProductCode,
+                            productName = a.ProductName,
+                            attribute = a.Attribute,
+                            productDescription = a.AddonDescription,
+                            productUnti = a.UnitCode,
+                            productPrice = b.Price,
+                            CurrencyCode = groupPrice.CurrencyCode
+                        }).ToList();
+            return show;
+        }
+
 
         public List<m_priceSetting_response> getprice(int domainId)
         {
-            
+
             var res = db.GroupPrice.Where(w => w.DomainId == domainId && w.Active == true).ToList();
             List<m_priceSetting_response> models = new List<m_priceSetting_response>();
             foreach (var m1 in res)

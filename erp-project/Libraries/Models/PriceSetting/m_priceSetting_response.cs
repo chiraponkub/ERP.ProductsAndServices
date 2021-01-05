@@ -10,7 +10,7 @@ namespace erp_project.Libraries.Models.PriceSetting
     {
         public int groupPriceID { get; set; }
         public string priceName { get; set; }
-        public int currencyCode { get; set; }
+        public string currencyCode { get; set; }
         public bool sellingPriceDefault { get; set; }
     }
 
@@ -20,8 +20,16 @@ namespace erp_project.Libraries.Models.PriceSetting
         public string priceName { get; set; }
     }
 
-    public class m_priceSetting_Product_response 
-    { 
-        
+    public class m_priceSetting_GetDataPrice_response
+    {
+        public int ProductAttributeId { get; set; }
+        public string productType { get; set; }
+        public string productCode { get; set; }
+        public string productName { get; set; }
+        public string attribute { get; set; }
+        public string productDescription { get; set; }
+        public string productUnti { get; set; }
+        public decimal? productPrice { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }

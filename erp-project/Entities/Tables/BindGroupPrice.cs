@@ -20,5 +20,7 @@ namespace erp_project.Entities.Tables
         public int DomainId { get; set; }
         [Required]
         public bool? Active { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal? Price { get; set; }
     }
 }
