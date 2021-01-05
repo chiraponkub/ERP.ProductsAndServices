@@ -1,4 +1,5 @@
 ﻿using erp_project.Entities.Tables;
+using erp_project.Entities.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -115,9 +116,22 @@ namespace erp_project.Entities
             {
                 entity.Property(e => e.ProductActive).HasDefaultValueSql("((1))");
             });
+
             #endregion
             #region Views (วิว)
+            modelBuilder.Entity<GetDataAddon>(entity =>
+            {
+                entity.HasNoKey();
 
+                entity.ToView("GetDataAddon", "productAndService");
+            });
+
+            modelBuilder.Entity<GetProductAndServices>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetProductAndServices", "productAndService");
+            });
             #endregion
             OnModelCreatingPartial(modelBuilder);
         }

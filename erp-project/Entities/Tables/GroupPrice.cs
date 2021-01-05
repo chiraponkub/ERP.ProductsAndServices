@@ -15,8 +15,10 @@ namespace erp_project.Entities.Tables
         [Column("priceName")]
         [StringLength(100)]
         public string PriceName { get; set; }
+        [Column("currencyId")]
+        public int CurrencyId { get; set; }
         [Column("currencyCode")]
-        public int CurrencyCode { get; set; }
+        public string CurrencyCode { get; set; }
         [Column("sellingPriceDefault")]
         public bool SellingPriceDefault { get; set; }
         [Column("domainID")]

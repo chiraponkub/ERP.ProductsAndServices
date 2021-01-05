@@ -90,13 +90,18 @@ namespace erp_project.Controllers
                 httpservice.Authorization(Token);
                 Domain dos = new Domain();
                 var getdomain = httpservice.Get<ERPHttpResponse<Domain>>($"{host}/rest-account/api/Domain/GetDomainById?domainId={domainId}").Result.Content;
-                var Find = db.GroupPrice.Where(w => w.SellingPriceDefault == true && w.DomainId == domainId).FirstOrDefault();
+                var Find = db.GroupPrice.Where(w => w.SellingPriceDefault == true && w.DomainId == domainId && w.Active == true).FirstOrDefault();
+
+                var PrimaryCurrency = HttpService.Get<ERPHttpResponse<List<PrimaryCurrency>>>($"{host}/rest-master/api/Master/currency").Result.Content;
+                PrimaryCurrency documentLanguage = PrimaryCurrency.data.Where(w => w.PrimaryCurrencyId == getdomain.data.primaryCurrencyId).FirstOrDefault();
+
                 if (Find == null)
                 {
                     var save = new GroupPrice
                     {
                         PriceName = "Standard",
-                        CurrencyCode = getdomain.data.primaryCurrencyId,
+                        CurrencyId = getdomain.data.primaryCurrencyId,
+                        CurrencyCode = documentLanguage.PrimaryCurrencycode,
                         DomainId = domainId,
                         SellingPriceDefault = true
                     };
@@ -109,15 +114,6 @@ namespace erp_project.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-
-        public class PrimaryCurrency
-        {
-            public int PrimaryCurrencyId { get; set; }
-            public string PrimaryCurrencycode { get; set; }
-            public string PrimaryCurrencyNameEn { get; set; }
-            public string PrimaryCurrencyNameTh { get; set; }
         }
 
         /// <summary>
@@ -138,6 +134,41 @@ namespace erp_project.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("GetDataPrice{GroupPriceId},{domainId}")]
+        public IActionResult GetDataPrice(
+            int domainId,
+            int GroupPriceId,
+            string Type,
+            string ProductCode,
+            string ProductName,
+            string Attribute,
+            string Description,
+            string Unit,
+            decimal? Above,
+            decimal? Below
+            )
+        {
+            try
+            {
+                return Ok(IProductAndServiceDasgboard.GetDataPrice(
+                    domainId,
+                    GroupPriceId,
+                    Type,
+                    ProductCode,
+                    ProductName,
+                    Attribute,
+                    Description,
+                    Unit,
+                    Above,
+                    Below
+                    ));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         /// <summary>
         /// ดึงข้อมูล Unit ทั้งหมดของ Domain นั้น

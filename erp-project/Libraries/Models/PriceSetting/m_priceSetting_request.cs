@@ -8,13 +8,22 @@ namespace erp_project.Libraries.Models.PriceSetting
     public class m_priceSetting_request
     {
         public string priceName { get; set; }
-        public int currencyCode { get; set; }
+        public int currencyId { get; set; }
+        public string currencyCode { get; set; }
         public int domainID { get; set; }
     }
 
     public class m_priceSetting_request_edti
     {
         public string priceName { get; set; }
+    }
+
+    public class PrimaryCurrency
+    {
+        public int PrimaryCurrencyId { get; set; }
+        public string PrimaryCurrencycode { get; set; }
+        public string PrimaryCurrencyNameEn { get; set; }
+        public string PrimaryCurrencyNameTh { get; set; }
     }
 
     public partial class Domain

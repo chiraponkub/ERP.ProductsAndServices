@@ -40,7 +40,7 @@ namespace erp_project.Libraries.Concretes
                         ProductImage = productimage,
                         ProductUntiId = req.productUntiId,
                         ProductActive = true,
-                        DomianId = req.domainId,
+                        DomainId = req.domainId,
                         ProductStatusId = req.productStatusId
                     };
                     db.Products.Add(product);
@@ -206,7 +206,7 @@ namespace erp_project.Libraries.Concretes
                     var check = db.GroupPrice.Where(w => w.DomainId == req.domainID).ToList();
                     foreach (var m1 in check)
                     {
-                        if (m1.PriceName == req.priceName && m1.CurrencyCode == req.currencyCode)
+                        if (m1.PriceName == req.priceName && m1.CurrencyCode == req.currencyCode && m1.Active == true)
                         {
                             throw new Exception("ชื่อซ้ำกับชื่อราคาซ้ำ");
                         } 
@@ -214,6 +214,7 @@ namespace erp_project.Libraries.Concretes
                     var save = db.GroupPrice.Add(new GroupPrice
                     {
                         PriceName = req.priceName,
+                        CurrencyId = req.currencyId,
                         CurrencyCode = req.currencyCode,
                         DomainId = req.domainID
                     });

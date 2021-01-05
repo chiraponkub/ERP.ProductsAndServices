@@ -6,7 +6,7 @@
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": "Entities",
-   "OutputPath": "Entities\/Tables",
+   "OutputPath": "Entities\/Views",
    "ProjectRootNamespace": "erp_project",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
@@ -14,43 +14,11 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[productAndService].[bindGroupPrice]"
+         "Name": "[productAndService].[GetDataAddon]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[productAndService].[groupPrice]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[ProductAddonDetails]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[ProductAddons]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[ProductAttributes]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[ProductAttributeValues]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[Products]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[productStatus]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[productType]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[productAndService].[productUnit]"
+         "Name": "[productAndService].[GetProductAndServices]"
       }
    ],
    "UseDatabaseNames": false,

@@ -27,7 +27,7 @@ namespace erp_project.Entities.Tables
         [Required]
         public bool? AddonActive { get; set; }
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string ProductCode { get; set; }
 
         [ForeignKey(nameof(ProductId))]
