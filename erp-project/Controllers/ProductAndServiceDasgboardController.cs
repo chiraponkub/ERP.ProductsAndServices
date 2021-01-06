@@ -94,7 +94,6 @@ namespace erp_project.Controllers
 
                 var PrimaryCurrency = HttpService.Get<ERPHttpResponse<List<PrimaryCurrency>>>($"{host}/rest-master/api/Master/currency").Result.Content;
                 PrimaryCurrency documentLanguage = PrimaryCurrency.data.Where(w => w.PrimaryCurrencyId == getdomain.data.primaryCurrencyId).FirstOrDefault();
-
                 if (Find == null)
                 {
                     var save = new GroupPrice

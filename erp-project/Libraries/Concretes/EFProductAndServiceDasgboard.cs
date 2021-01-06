@@ -10,6 +10,7 @@ using erp_project.Libraries.Models.ProductAndService;
 using Microsoft.EntityFrameworkCore;
 using erp_project.Libraries.Models.PriceSetting;
 using erp_project.Entities.Tables;
+using Microsoft.Data.SqlClient;
 
 namespace erp_project.Libraries.Concretes
 {
@@ -170,7 +171,7 @@ namespace erp_project.Libraries.Concretes
         }
 
         public List<m_priceSetting_GetDataPrice_response> GetDataPrice(
-            int domainId, 
+            int domainId,
             int GroupPriceId,
             string Type,
             string ProductCode,
@@ -204,10 +205,33 @@ namespace erp_project.Libraries.Concretes
                     db.SaveChanges();
                 }
             }
+            string v1 = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId}";
+            if (Above != null && Below != null)
+            {
+                v1 += $" AND AddonPrice BETWEEN {Above} AND {Below}";
+            }
+            else if (Above != null && Below == null)
+            {
+                v1 += $" AND AddonPrice >= {Above}";
+            }
+            else if (Above == null && Below != null)
+            {
+                v1 += $" AND AddonPrice <= {Below}";
+            }
+
+            var retrue = db.GetDataAddon.FromSqlRaw($"Exec [productAndService].[AdvancedSearchAddOn] @Type,@ProductCode,@ProductName,@Attribute,@Description,@Unit,@AddonPrice",
+                new SqlParameter("@Type", Type ?? (object)DBNull.Value),
+                new SqlParameter("@ProductCode", ProductCode ?? (object)DBNull.Value),
+                new SqlParameter("@ProductName", ProductName ?? (object)DBNull.Value),
+                new SqlParameter("@Attribute", Attribute ?? (object)DBNull.Value),
+                new SqlParameter("@Description", Description ?? (object)DBNull.Value),
+                new SqlParameter("@Unit", Unit ?? (object)DBNull.Value),
+                new SqlParameter("@AddonPrice", v1 ?? (object)DBNull.Value)
+                ).ToList();
 
             var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId).ToList();
             var show = (from b in BindGroupPrice
-                        join a in DataAddon on b.AddonId equals a.AddonId
+                        join a in retrue on b.AddonId equals a.AddonId
                         select new m_priceSetting_GetDataPrice_response
                         {
                             ProductAttributeId = b.AddonId,
