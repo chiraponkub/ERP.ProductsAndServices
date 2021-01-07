@@ -192,7 +192,7 @@ namespace erp_project.Controllers
         /// <param name="req"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPut("EditaddonPrice")]
+        [HttpPut("EditaddonPrice{GroupPriceId}")]
         public ActionResult EditaddonPrice(int GroupPriceId ,List<EditPrice> req) 
         {
             try
