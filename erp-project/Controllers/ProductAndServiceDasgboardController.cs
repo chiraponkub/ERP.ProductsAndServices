@@ -134,7 +134,7 @@ namespace erp_project.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetDataPrice{GroupPriceId},{domainId}")]
+        [HttpGet("GetDataPrice{GroupPriceId}/{domainId}")]
         public IActionResult GetDataPrice(
             int domainId,
             int GroupPriceId,
