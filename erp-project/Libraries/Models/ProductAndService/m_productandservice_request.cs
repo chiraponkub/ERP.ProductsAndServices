@@ -18,7 +18,7 @@ namespace erp_project.Libraries.Models.ProductAndService
         public int productTypeId { get; set; }
         public string productDescription { get; set; }
         public int productPrice { get; set; }
-        //public List<IFormFile> files { get; set; }
+        public List<IFormFile> files { get; set; }
         public int productUntiId { get; set; }
         public int productStatusId { get; set; }
         public int domainId { get; set; }
@@ -40,7 +40,7 @@ namespace erp_project.Libraries.Models.ProductAndService
 
     public class m_productandservice_Addon_request
     {
-        //public List<IFormFile> files { get; set; }
+        public List<IFormFile> files { get; set; }
         public string valueDescription { get; set; }
         public int price { get; set; }
         public bool status { get; set; }
