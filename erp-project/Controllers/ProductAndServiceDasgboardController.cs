@@ -133,6 +133,21 @@ namespace erp_project.Controllers
             }
         }
 
+
+        /// <summary>
+        /// ดึงข้อมูล ProductAddon ใน GroupPrice
+        /// </summary>
+        /// <param name="domainId"></param>
+        /// <param name="GroupPriceId"></param>
+        /// <param name="Type"></param>
+        /// <param name="ProductCode"></param>
+        /// <param name="ProductName"></param>
+        /// <param name="Attribute"></param>
+        /// <param name="Description"></param>
+        /// <param name="Unit"></param>
+        /// <param name="Above"></param>
+        /// <param name="Below"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetDataPrice{GroupPriceId}/{domainId}")]
         public IActionResult GetDataPrice(
@@ -200,6 +215,33 @@ namespace erp_project.Controllers
             try
             {
                 return Ok(IProductAndServiceDasgboard.editunit(unitId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("GetProductType")]
+        public IActionResult ProductType()
+        {
+            try
+            {
+                return Ok(db.ProductType.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetProductStatus")]
+        public IActionResult GetProductStatus()
+        {
+            try
+            {
+                return Ok(db.ProductStatus.ToList());
             }
             catch (Exception ex)
             {

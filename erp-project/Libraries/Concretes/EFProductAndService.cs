@@ -83,14 +83,33 @@ namespace erp_project.Libraries.Concretes
                             ProductCode = m3.productCodeOnValue
                         };
                         db.ProductAddons.Add(addOn);
-                        db.SaveChanges();
-
-                        foreach (var image in Attributeimage)
+                        try
                         {
-                            var Images = db.ProductAddons.FirstOrDefault(f => f.AddonId == addOn.AddonId);
-                            Images.AddonImage = image;
                             db.SaveChanges();
                         }
+                        catch (Exception ex)
+                        {
+
+                            throw ex;
+                        }
+                    }
+                    int count1 = 0;
+                    var Images = db.ProductAddons.Where(f => f.AddonId == product.ProductId).ToList();
+                    foreach (var mm1 in Images)
+                    {
+                        int count2 = 0;
+                        foreach (var image in Attributeimage)
+                        {
+                            if (count1 == count2)
+                            {
+                                var es = db.ProductAddons.FirstOrDefault(f => f.AddonId == mm1.AddonId);
+                                es.AddonImage = image;
+                                db.SaveChanges();
+                                break;
+                            }
+                            count2++;
+                        }
+                        count1++;
                     }
 
                     Transaction.Commit();
@@ -217,7 +236,7 @@ namespace erp_project.Libraries.Concretes
                         if (m1.PriceName == req.priceName && m1.CurrencyCode == req.currencyCode && m1.Active == true)
                         {
                             throw new Exception("ชื่อซ้ำกับชื่อราคาซ้ำ");
-                        } 
+                        }
                     }
                     var save = db.GroupPrice.Add(new GroupPrice
                     {
