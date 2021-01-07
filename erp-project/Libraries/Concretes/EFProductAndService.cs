@@ -83,15 +83,7 @@ namespace erp_project.Libraries.Concretes
                             ProductCode = m3.productCodeOnValue
                         };
                         db.ProductAddons.Add(addOn);
-                        try
-                        {
-                            db.SaveChanges();
-                        }
-                        catch (Exception ex)
-                        {
-
-                            throw ex;
-                        }
+                        db.SaveChanges();
                     }
                     int count1 = 0;
                     var Images = db.ProductAddons.Where(f => f.AddonId == product.ProductId).ToList();
@@ -256,7 +248,6 @@ namespace erp_project.Libraries.Concretes
                 }
             }
         }
-
         public bool editPrice(int GroupPriceId, m_priceSetting_request_edti req)
         {
             using (var Transaction = db.Database.BeginTransaction())
@@ -280,7 +271,6 @@ namespace erp_project.Libraries.Concretes
                 }
             }
         }
-
         public bool delPrice(int GroupPriceId)
         {
             using (var Transaction = db.Database.BeginTransaction())
@@ -304,7 +294,16 @@ namespace erp_project.Libraries.Concretes
                 }
             }
         }
-
+        public bool EditaddonPrice(int GroupPriceId ,List<EditPrice> req)
+        {
+            foreach (var m1 in req)
+            {
+                var res = db.BindGroupPrice.FirstOrDefault(f => f.AddonId == m1.ProductAttributeId && f.GroupPriceId == GroupPriceId);
+                res.Price = m1.productPrice;
+                db.SaveChanges();
+            }
+            return true;
+        }
         public bool unit(m_unit_request res)
         {
             ProductUnit ss = new ProductUnit
