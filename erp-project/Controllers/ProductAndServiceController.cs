@@ -54,8 +54,8 @@ namespace erp_project.Controllers
 
                     HttpService.Authorization(UserAuthorization);
                     string host = Configuration.GetValue<string>("BE_HOST");
-                    p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"https://localhost:5004/api/Upload/Uploadimg", req.files).Result.Content;
-                    //p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", req.files).Result.Content;
+                    //p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"https://localhost:5004/api/Upload/Uploadimg", req.files).Result.Content;
+                    p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", req.files).Result.Content;
                     if (p_image.message != "Ok" || p_image.data.Count() != 1)
                         return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
                     image = p_image.data[0].fullPath;
@@ -76,12 +76,10 @@ namespace erp_project.Controllers
                             {
                                 Headers = adasd.Headers
                             };
-                            //adasd.Name = adasd.Name.Split('.').Last();
-                            //Path.Combine(adasd.Name,adasd.Name.Split('.').Last());
                             files.Add(ss);
 
-                            //List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", m1.files).Result.Content;
-                            List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"https://localhost:5004/api/Upload/Uploadimg", files).Result.Content;
+                            List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", files).Result.Content;
+                            //List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"https://localhost:5004/api/Upload/Uploadimg", files).Result.Content;
                             if (List_image.message != "Ok" || List_image.data.Count() != 1)
                                 return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
                             Attributeimage.Add(List_image.data[0].fullPath);
