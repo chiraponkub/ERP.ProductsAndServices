@@ -94,7 +94,6 @@ namespace erp_project.Library.Concretes
                 var content = new StreamContent(file.OpenReadStream());
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
                 formDataContent.Add(content, file.Name, file.FileName);
-
             }
             httpRequest.Content = formDataContent;
 
