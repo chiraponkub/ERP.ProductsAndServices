@@ -187,6 +187,25 @@ namespace erp_project.Controllers
         }
 
         /// <summary>
+        /// แก้ไขราคาสินค้า
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("EditaddonPrice")]
+        public ActionResult EditaddonPrice(int GroupPriceId ,List<EditPrice> req) 
+        {
+            try
+            {
+                return Ok(IProductAndService.EditaddonPrice(GroupPriceId, req));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// ลบ PriceSettingName
         /// </summary>
         /// <param name="GroupPriceId"></param>
