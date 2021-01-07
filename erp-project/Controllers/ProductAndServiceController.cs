@@ -83,6 +83,11 @@ namespace erp_project.Controllers
             }
         }
 
+        /// <summary>
+        /// ตัวอย่างรูปแบบการส่งข้อมูลแบบ Json ใน AddProduct
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
         [HttpPost("JsonAddProduct")]
         public ActionResult JsonAddProduct(m_productandservice_main_request req) 
         {
@@ -90,7 +95,11 @@ namespace erp_project.Controllers
             return Ok(models);
         }
 
-
+        /// <summary>
+        /// ส่วนเอาไว้กระจาย ProductAttribute ออกมาเป็นส่วนๆ (ทวีคูณ Product attribute)
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
         [HttpPost("MakeProduct")]
         public ActionResult MakeProduct(IEnumerable<ProductAttributeModel> req)
         {
