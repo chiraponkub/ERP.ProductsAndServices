@@ -7,6 +7,7 @@ using erp_project.Libraries.Abstracts;
 using erp_project.Libraries.Models.PriceSetting;
 using erp_project.Libraries.Models.ProductAndService;
 using erp_project.Libraries.Models.Unit;
+using erp_project.Middlewares;
 using erp_project.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ namespace erp_project.Controllers
             this.IProductAndService = IProductAndService;
         }
 
+        
 
         /// <summary>
         /// เพิ่ม ProductAndService (ยังไม่สามารถเพิ่มรูปภาพได้)
@@ -36,7 +38,7 @@ namespace erp_project.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("addProductAndService")]
-        public ActionResult AddProductAndService(m_productandservice_main_request req)
+        public ActionResult AddProductAndService([FromForm] m_productandservice_main_request req)
         {
             try
             {
@@ -74,6 +76,28 @@ namespace erp_project.Controllers
                 //    return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
                 //}
                 return Ok(IProductAndService.addProductAndService(req, null, null));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("JsonAddProduct")]
+        public ActionResult JsonAddProduct(m_productandservice_main_request req) 
+        {
+            m_productandservice_main_request models = new m_productandservice_main_request();
+            return Ok(models);
+        }
+
+
+        [HttpPost("MakeProduct")]
+        public ActionResult MakeProduct(IEnumerable<ProductAttributeModel> req)
+        {
+            try
+            {
+                var retureProductList = ProductAddonExtesionToFE.GetProductAddons(req);
+                return Ok(retureProductList);
             }
             catch (Exception ex)
             {

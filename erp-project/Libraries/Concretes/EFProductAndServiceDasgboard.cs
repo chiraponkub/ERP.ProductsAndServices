@@ -205,18 +205,18 @@ namespace erp_project.Libraries.Concretes
                     db.SaveChanges();
                 }
             }
-            string v1 = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId}";
+            string AddonPrice = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId}";
             if (Above != null && Below != null)
             {
-                v1 += $" AND AddonPrice BETWEEN {Above} AND {Below}";
+                AddonPrice += $" AND AddonPrice BETWEEN {Above} AND {Below}";
             }
             else if (Above != null && Below == null)
             {
-                v1 += $" AND AddonPrice >= {Above}";
+                AddonPrice += $" AND AddonPrice >= {Above}";
             }
             else if (Above == null && Below != null)
             {
-                v1 += $" AND AddonPrice <= {Below}";
+                AddonPrice += $" AND AddonPrice <= {Below}";
             }
 
             var retrue = db.GetDataAddon.FromSqlRaw($"Exec [productAndService].[AdvancedSearchAddOn] @Type,@ProductCode,@ProductName,@Attribute,@Description,@Unit,@AddonPrice",
@@ -226,7 +226,7 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@Attribute", Attribute ?? (object)DBNull.Value),
                 new SqlParameter("@Description", Description ?? (object)DBNull.Value),
                 new SqlParameter("@Unit", Unit ?? (object)DBNull.Value),
-                new SqlParameter("@AddonPrice", v1 ?? (object)DBNull.Value)
+                new SqlParameter("@AddonPrice", AddonPrice ?? (object)DBNull.Value)
                 ).ToList();
 
             var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId).ToList();
