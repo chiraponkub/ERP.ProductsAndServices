@@ -107,10 +107,6 @@ namespace erp_project.Middlewares
             return items;
         }
 
-        internal static object GetProductAddons(ProductAttributeModel productAttribute)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
     public class ProductAttributeModel
