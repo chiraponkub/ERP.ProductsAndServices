@@ -21,7 +21,7 @@ namespace erp_project.Libraries.Concretes
             this.db = db;
         }
 
-        public bool addProductAndService(m_productandservice_main_request req, string productimage, string Attributeimage)
+        public bool addProductAndService(m_productandservice_main_request req, string productimage, List<string> Attributeimage)
         {
             using (var Transaction = db.Database.BeginTransaction())
             {
@@ -52,7 +52,7 @@ namespace erp_project.Libraries.Concretes
                         {
                             ProductId = product.ProductId,
                             AttibuteName = m1.attibuteName,
-                            AttributeActive = true,
+                            AttributeActive = true
                         };
                         db.ProductAttributes.Add(attribute);
                         db.SaveChanges();
@@ -75,16 +75,24 @@ namespace erp_project.Libraries.Concretes
                         var addOn = new ProductAddons
                         {
                             ProductId = product.ProductId,
-                            AddonImage = Attributeimage,
+                            AddonImage = null,
                             AddonDescription = m3.valueDescription,
                             AddonActive = true,
                             AddonStatus = m3.status,
                             AddonPrice = m3.price,
-                            ProductCode = m3.productCodeOnValue,
+                            ProductCode = m3.productCodeOnValue
                         };
                         db.ProductAddons.Add(addOn);
                         db.SaveChanges();
+
+                        foreach (var image in Attributeimage)
+                        {
+                            var Images = db.ProductAddons.FirstOrDefault(f => f.AddonId == addOn.AddonId);
+                            Images.AddonImage = image;
+                            db.SaveChanges();
+                        }
                     }
+
                     Transaction.Commit();
 
                     var tbl_attributes = db.ProductAttributes.Where(w => w.ProductId == product.ProductId).ToList();

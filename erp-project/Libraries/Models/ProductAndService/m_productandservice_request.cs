@@ -22,7 +22,6 @@ namespace erp_project.Libraries.Models.ProductAndService
         public int productUntiId { get; set; }
         public int productStatusId { get; set; }
         public int domainId { get; set; }
-        public bool productActive { get; set; }
         public List<m_productandservice_attributeName_request> attribute { get; set; }
         public List<m_productandservice_Addon_request> addon { get; set; }
     }
