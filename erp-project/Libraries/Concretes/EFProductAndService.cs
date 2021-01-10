@@ -125,13 +125,13 @@ namespace erp_project.Libraries.Concretes
                                }).Distinct().ToList();
                     var retureProductList = ProductAddonExtesion.GetProductAddons(res).ToList();
 
-                    var tbl_newAddon = tbl_Addon.Select(s => new
-                    {
-                        AddonId = s.AddonId,
-                        ProductCodeList = string.Join("-", s.ProductCode.Split("-").Where(w => w != "code").ToList())
-                    }).ToList();
                     foreach (var Product in retureProductList)
                     {
+                        var tbl_newAddon = tbl_Addon.Select(s => new
+                        {
+                            AddonId = s.AddonId,
+                            ProductCodeList = string.Join("-", s.ProductCode.Split("-").Where(w => w != "Code").ToList())
+                        }).ToList();
                         var keylist = Product.Keys;
                         List<m_ProductAttributeValueModels> ListAttributeStr = new List<m_ProductAttributeValueModels>();
                         foreach (var key in keylist)
@@ -294,7 +294,7 @@ namespace erp_project.Libraries.Concretes
                 }
             }
         }
-        public bool EditaddonPrice(int GroupPriceId ,List<EditPrice> req)
+        public bool EditaddonPrice(int GroupPriceId, List<EditPrice> req)
         {
             foreach (var m1 in req)
             {
@@ -306,6 +306,11 @@ namespace erp_project.Libraries.Concretes
         }
         public bool unit(m_unit_request res)
         {
+            var check = db.ProductUnit.FirstOrDefault(f => f.DomainId == res.domainID);
+            if (check.UnitCode == res.unitName)
+            {
+                throw new Exception("ชื่อซ้ำ");
+            }
             ProductUnit ss = new ProductUnit
             {
                 DomainId = res.domainID,
@@ -319,9 +324,9 @@ namespace erp_project.Libraries.Concretes
         {
             var Find = db.ProductUnit.FirstOrDefault(f => f.ProductUnitId == untiId);
             if (Find == null)
-            {
                 return false;
-            }
+            if (Find.UnitCode == res.unitName && Find.Active == true)
+                throw new Exception("ชื่อซ้ำ");
             Find.UnitCode = res.unitName;
             db.SaveChanges();
             return true;
