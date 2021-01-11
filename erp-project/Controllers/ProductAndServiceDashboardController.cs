@@ -17,12 +17,12 @@ namespace erp_project.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductAndServiceDasgboardController : ERPControllerBase
+    public class ProductAndServiceDashboardController : ERPControllerBase
     {
         private readonly DBConnect db;
         private readonly IProductAndServiceDasgboard IProductAndServiceDasgboard;
 
-        public ProductAndServiceDasgboardController(DBConnect db, IProductAndServiceDasgboard IProductAndServiceDasgboard)
+        public ProductAndServiceDashboardController(DBConnect db, IProductAndServiceDasgboard IProductAndServiceDasgboard)
         {
             this.db = db;
             this.IProductAndServiceDasgboard = IProductAndServiceDasgboard;
@@ -42,7 +42,7 @@ namespace erp_project.Controllers
         /// <param name="Below">ราคาน้อยกว่า</param>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("Dasgboard{domainId}")]
+        [HttpGet("Dashboard{domainId}")]
         public ActionResult getproduct(
             string domainId,
             string StatusId,
@@ -67,6 +67,20 @@ namespace erp_project.Controllers
                     Above,
                     Below
                     ));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("GetEditProducts/{ProductId}")]
+        public ActionResult View_Attribute(int ProductId)
+        {
+            try
+            {
+                return Ok(IProductAndServiceDasgboard.Edit_GetProduct(ProductId));
             }
             catch (Exception ex)
             {

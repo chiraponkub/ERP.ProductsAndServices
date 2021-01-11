@@ -15,15 +15,20 @@ namespace erp_project.Entities.Views
         [StringLength(100)]
         public string Attribute { get; set; }
         [StringLength(100)]
+        public string AddonImage { get; set; }
+        public bool AddonStatus { get; set; }
+        [StringLength(100)]
         public string ProductCode { get; set; }
         [StringLength(50)]
         public string ProductName { get; set; }
         [StringLength(10)]
         public string UnitCode { get; set; }
+        [Required]
         public string AddonDescription { get; set; }
         public int? DomainId { get; set; }
         [Column("productTypeName")]
         [StringLength(50)]
         public string ProductTypeName { get; set; }
+        public int? ProductId { get; set; }
     }
 }

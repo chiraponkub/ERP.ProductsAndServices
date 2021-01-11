@@ -24,10 +24,12 @@ namespace erp_project.Entities.Views
         [StringLength(50)]
         public string ProductImage { get; set; }
         public int ProductUntiId { get; set; }
-        public int? DomainId { get; set; }
+        [StringLength(10)]
+        public string UnitCode { get; set; }
         public bool ProductActive { get; set; }
+        public int DomainId { get; set; }
         [Column("productStatusID")]
-        public int? ProductStatusId { get; set; }
+        public int ProductStatusId { get; set; }
         [Column("productStatusName")]
         [StringLength(50)]
         public string ProductStatusName { get; set; }

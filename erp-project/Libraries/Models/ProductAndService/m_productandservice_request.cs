@@ -13,11 +13,12 @@ namespace erp_project.Libraries.Models.ProductAndService
 
     public class m_productandservice_main_request
     {
+        public int productsId { get; set; }
         public string productCode { get; set; }
         public string productName { get; set; }
         public int productTypeId { get; set; }
         public string productDescription { get; set; }
-        public int productPrice { get; set; }
+        public decimal productPrice { get; set; }
         public List<IFormFile> files { get; set; }
         public int productUntiId { get; set; }
         public int productStatusId { get; set; }

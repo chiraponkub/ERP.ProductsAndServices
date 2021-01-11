@@ -34,6 +34,7 @@ namespace erp_project.Libraries.Abstracts
             decimal? Below
             );
         List<m_priceSetting_response> getprice(int domainId);
+        m_Edit_productandservice_main_request Edit_GetProduct(int ProductId);
         m_priceSetting_response_edit getEditPrice(int groupPriceID);
         List<m_unit_response> getunit(int domainID);
         m_unit_response editunit(int unitId);

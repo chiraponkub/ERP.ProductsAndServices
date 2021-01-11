@@ -291,7 +291,60 @@ namespace erp_project.Libraries.Concretes
             return show;
         }
 
+        public m_Edit_productandservice_main_request Edit_GetProduct(int ProductId)
+        {
+            var products = db.GetProductAndServices.FirstOrDefault(f => f.ProductId == ProductId);
+            m_Edit_productandservice_main_request models = new m_Edit_productandservice_main_request();
+            models.productsId = products.ProductId;
+            models.productName = products.ProductName;
+            models.productTypeId = products.ProductTypeId;
+            models.productCode = products.ProductCode;
+            models.productStatusId = products.ProductStatusId;
+            models.productUntiId = products.ProductUntiId;
+            models.productDescription = products.ProductDescription;
+            models.productPrice = products.ProductPrice;
+            models.files = products.ProductImage ?? null;
+            models.attribute = new List<m_Edit_productandservice_attributeName_request>();
+            models.addon = new List<m_Edit_productandservice_Addon_request>();
 
+            var attribute = (from patt in db.ProductAttributes
+                             where patt.ProductId == ProductId
+                             select new m_Edit_productandservice_attributeName_request
+                             {
+                                 attibuteName = patt.AttibuteName,
+                                 value = (from val in db.ProductAttributeValues
+                                          where val.AttributeId == patt.AttributeId
+                                          select new m_Edit_productandservice_AttributeValue_request
+                                          {
+                                              valueName = val.ValueName
+                                          }).ToList()
+                             }).ToList();
+
+            foreach (var m1 in attribute)
+            {
+                models.attribute.Add(new m_Edit_productandservice_attributeName_request
+                {
+                    attibuteName = m1.attibuteName,
+                    value = m1.value
+                });
+            }
+
+            var getdataAddon = db.GetDataAddon.Where(w => w.ProductId == ProductId).ToList();
+
+            foreach (var m1 in getdataAddon)
+            {
+                models.addon.Add(new m_Edit_productandservice_Addon_request
+                {
+                    files = m1.AddonImage  ?? null,
+                    productCodeOnValue = m1.ProductCode,
+                    valueDescription = m1.AddonDescription,
+                    price = m1.AddonPrice,
+                    status = m1.AddonStatus
+                });
+            }
+
+            return models;
+        }
         public List<m_priceSetting_response> getprice(int domainId)
         {
 
@@ -309,7 +362,6 @@ namespace erp_project.Libraries.Concretes
             }
             return models;
         }
-
         public m_priceSetting_response_edit getEditPrice(int groupPriceID)
         {
             var res = db.GroupPrice.Where(w => w.Active == true).FirstOrDefault(f => f.GroupPriceId == groupPriceID);
@@ -320,7 +372,6 @@ namespace erp_project.Libraries.Concretes
             models.priceName = res.PriceName;
             return models;
         }
-
         public List<m_unit_response> getunit(int domainID)
         {
             var res = db.ProductUnit.Where(w => w.DomainId == domainID && w.Active == true).ToList();
@@ -335,7 +386,6 @@ namespace erp_project.Libraries.Concretes
             }
             return models;
         }
-
         public m_unit_response editunit(int unitId)
         {
             var m1 = db.ProductUnit.Where(w => w.Active == true).FirstOrDefault(w => w.ProductUnitId == unitId);
