@@ -30,143 +30,185 @@ namespace erp_project.Libraries.Concretes
             string ProductCode,
             string ProductName,
             string Description,
-            string Unit,
+            string ProductUntiId,
             decimal? Above,
             decimal? Below
             )
         {
             List<m_productandservice_response> models = new List<m_productandservice_response>();
-            var Products = db.Products.Where(f => f.DomainId.ToString() == domainId && f.ProductActive == true);
-            if (
-                string.IsNullOrEmpty(StatusId)
-                && string.IsNullOrEmpty(Type)
-                && string.IsNullOrEmpty(ProductCode)
-                && string.IsNullOrEmpty(ProductName)
-                && string.IsNullOrEmpty(Description)
-                && string.IsNullOrEmpty(Unit)
-                && Above == null
-                && Below == null
-                )
+
+
+            string Price = $" AND Price IS NOT NULL AND DomainId = {domainId}";
+            if (Above != null && Below != null)
             {
-                var res = Products.ToList();
-                foreach (var m1 in res)
-                {
-                    models.Add(new m_productandservice_response
-                    {
-                        productId = m1.ProductId,
-                        productStatusId = m1.ProductStatusId,
-                        productTypeId = m1.ProductTypeId,
-                        productCode = m1.ProductCode,
-                        productName = m1.ProductName,
-                        productDescription = m1.ProductDescription,
-                        productUntiId = m1.ProductUntiId,
-                        productPrice = m1.ProductPrice
-                    });
-                }
+                Price += $" AND Price BETWEEN {Above} AND {Below}";
             }
-            else if (Above == null && Below == null)
+            else if (Above != null && Below == null)
             {
-                var res = Products.Where(w =>
-                w.ProductStatusId.ToString().Contains(StatusId)
-                || w.ProductTypeId.ToString().Contains(Type)
-                || w.ProductCode.Contains(ProductCode)
-                || w.ProductName.Contains(ProductName)
-                || w.ProductDescription.Contains(Description)
-                || w.ProductUntiId.ToString().Contains(Unit)
+                Price += $" AND Price >= {Above}";
+            }
+            else if (Above == null && Below != null)
+            {
+                Price += $" AND Price <= {Below}";
+            }
+
+            var retrue = db.GetProductAndServices.FromSqlRaw($"Exec [productAndService].[AdvancedSearchProduct] @domainId,@StatusId,@Type,@ProductCode,@ProductName,@ProductDescription,@ProductUntiId,@Price",
+                new SqlParameter("@domainId", domainId ?? (object)DBNull.Value),
+                new SqlParameter("@StatusId", StatusId ?? (object)DBNull.Value),
+                new SqlParameter("@Type", Type ?? (object)DBNull.Value),
+                new SqlParameter("@ProductCode", ProductCode ?? (object)DBNull.Value),
+                new SqlParameter("@ProductName", ProductName ?? (object)DBNull.Value),
+                new SqlParameter("@ProductDescription", Description ?? (object)DBNull.Value),
+                new SqlParameter("@ProductUntiId", ProductUntiId ?? (object)DBNull.Value),
+                new SqlParameter("@Price" , Price ?? (object)DBNull.Value)
                 ).ToList();
-                foreach (var m1 in res)
-                {
-                    models.Add(new m_productandservice_response
-                    {
-                        productId = m1.ProductId,
-                        productStatusId = m1.ProductStatusId,
-                        productTypeId = m1.ProductTypeId,
-                        productCode = m1.ProductCode,
-                        productName = m1.ProductName,
-                        productDescription = m1.ProductDescription,
-                        productUntiId = m1.ProductUntiId,
-                        productPrice = m1.ProductPrice
-                    });
-                }
-            }
-            else
+
+            foreach (var m1 in retrue)
             {
-                if (Above != null && Below == null)
+                models.Add(new m_productandservice_response
                 {
-                    var res = Products.Where(w => w.ProductPrice >= Above)
-                        .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
-                        || w.ProductTypeId.ToString().Contains(Type)
-                        || w.ProductCode.Contains(ProductCode)
-                        || w.ProductName.Contains(ProductName)
-                        || w.ProductDescription.Contains(Description)
-                        || w.ProductUntiId.ToString().Contains(Unit))
-                        .ToList();
-                    foreach (var m1 in res)
-                    {
-                        models.Add(new m_productandservice_response
-                        {
-                            productId = m1.ProductId,
-                            productStatusId = m1.ProductStatusId,
-                            productTypeId = m1.ProductTypeId,
-                            productCode = m1.ProductCode,
-                            productName = m1.ProductName,
-                            productDescription = m1.ProductDescription,
-                            productUntiId = m1.ProductUntiId,
-                            productPrice = m1.ProductPrice
-                        });
-                    }
-                }
-                else if (Below != null && Above == null)
-                {
-                    var res = Products.Where(w => w.ProductPrice <= Below)
-                        .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
-                        || w.ProductTypeId.ToString().Contains(Type)
-                        || w.ProductCode.Contains(ProductCode)
-                        || w.ProductName.Contains(ProductName)
-                        || w.ProductDescription.Contains(Description)
-                        || w.ProductUntiId.ToString().Contains(Unit))
-                        .ToList();
-                    foreach (var m1 in res)
-                    {
-                        models.Add(new m_productandservice_response
-                        {
-                            productId = m1.ProductId,
-                            productStatusId = m1.ProductStatusId,
-                            productTypeId = m1.ProductTypeId,
-                            productCode = m1.ProductCode,
-                            productName = m1.ProductName,
-                            productDescription = m1.ProductDescription,
-                            productUntiId = m1.ProductUntiId,
-                            productPrice = m1.ProductPrice
-                        });
-                    }
-                }
-                else
-                {
-                    var res = Products.Where(w => w.ProductPrice >= Above && w.ProductPrice <= Below)
-                        .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
-                        || w.ProductTypeId.ToString().Contains(Type)
-                        || w.ProductCode.Contains(ProductCode)
-                        || w.ProductName.Contains(ProductName)
-                        || w.ProductDescription.Contains(Description)
-                        || w.ProductUntiId.ToString().Contains(Unit))
-                        .ToList();
-                    foreach (var m1 in res)
-                    {
-                        models.Add(new m_productandservice_response
-                        {
-                            productId = m1.ProductId,
-                            productStatusId = m1.ProductStatusId,
-                            productTypeId = m1.ProductTypeId,
-                            productCode = m1.ProductCode,
-                            productName = m1.ProductName,
-                            productDescription = m1.ProductDescription,
-                            productUntiId = m1.ProductUntiId,
-                            productPrice = m1.ProductPrice
-                        });
-                    }
-                }
+                    productId = m1.ProductId,
+                    productStatusId = m1.ProductStatusId,
+                    productTypeId = m1.ProductTypeId,
+                    productCode = m1.ProductCode,
+                    productName = m1.ProductName,
+                    productDescription = m1.ProductDescription,
+                    productUntiId = m1.ProductUntiId,
+                    productPrice = m1.ProductPrice
+                });
             }
+
+            //var Products = db.Products.Where(f => f.DomainId.ToString() == domainId && f.ProductActive == true);
+            //if (
+            //    string.IsNullOrEmpty(StatusId)
+            //    && string.IsNullOrEmpty(Type)
+            //    && string.IsNullOrEmpty(ProductCode)
+            //    && string.IsNullOrEmpty(ProductName)
+            //    && string.IsNullOrEmpty(Description)
+            //    && string.IsNullOrEmpty(Unit)
+            //    && Above == null
+            //    && Below == null
+            //    )
+            //{
+            //    var res = Products.ToList();
+            //    foreach (var m1 in res)
+            //    {
+            //        models.Add(new m_productandservice_response
+            //        {
+            //            productId = m1.ProductId,
+            //            productStatusId = m1.ProductStatusId,
+            //            productTypeId = m1.ProductTypeId,
+            //            productCode = m1.ProductCode,
+            //            productName = m1.ProductName,
+            //            productDescription = m1.ProductDescription,
+            //            productUntiId = m1.ProductUntiId,
+            //            productPrice = m1.ProductPrice
+            //        });
+            //    }
+            //}
+            //else if (Above == null && Below == null)
+            //{
+            //    var res = Products.Where(w =>
+            //    w.ProductStatusId.ToString().Contains(StatusId)
+            //    || w.ProductTypeId.ToString().Contains(Type)
+            //    || w.ProductCode.Contains(ProductCode)
+            //    || w.ProductName.Contains(ProductName)
+            //    || w.ProductDescription.Contains(Description)
+            //    || w.ProductUntiId.ToString().Contains(Unit)
+            //    ).ToList();
+            //    foreach (var m1 in res)
+            //    {
+            //        models.Add(new m_productandservice_response
+            //        {
+            //            productId = m1.ProductId,
+            //            productStatusId = m1.ProductStatusId,
+            //            productTypeId = m1.ProductTypeId,
+            //            productCode = m1.ProductCode,
+            //            productName = m1.ProductName,
+            //            productDescription = m1.ProductDescription,
+            //            productUntiId = m1.ProductUntiId,
+            //            productPrice = m1.ProductPrice
+            //        });
+            //    }
+            //}
+            //else
+            //{
+            //    if (Above != null && Below == null)
+            //    {
+            //        var res = Products.Where(w => w.ProductPrice >= Above)
+            //            .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
+            //            || w.ProductTypeId.ToString().Contains(Type)
+            //            || w.ProductCode.Contains(ProductCode)
+            //            || w.ProductName.Contains(ProductName)
+            //            || w.ProductDescription.Contains(Description)
+            //            || w.ProductUntiId.ToString().Contains(Unit))
+            //            .ToList();
+            //        foreach (var m1 in res)
+            //        {
+            //            models.Add(new m_productandservice_response
+            //            {
+            //                productId = m1.ProductId,
+            //                productStatusId = m1.ProductStatusId,
+            //                productTypeId = m1.ProductTypeId,
+            //                productCode = m1.ProductCode,
+            //                productName = m1.ProductName,
+            //                productDescription = m1.ProductDescription,
+            //                productUntiId = m1.ProductUntiId,
+            //                productPrice = m1.ProductPrice
+            //            });
+            //        }
+            //    }
+            //    else if (Below != null && Above == null)
+            //    {
+            //        var res = Products.Where(w => w.ProductPrice <= Below)
+            //            .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
+            //            || w.ProductTypeId.ToString().Contains(Type)
+            //            || w.ProductCode.Contains(ProductCode)
+            //            || w.ProductName.Contains(ProductName)
+            //            || w.ProductDescription.Contains(Description)
+            //            || w.ProductUntiId.ToString().Contains(Unit))
+            //            .ToList();
+            //        foreach (var m1 in res)
+            //        {
+            //            models.Add(new m_productandservice_response
+            //            {
+            //                productId = m1.ProductId,
+            //                productStatusId = m1.ProductStatusId,
+            //                productTypeId = m1.ProductTypeId,
+            //                productCode = m1.ProductCode,
+            //                productName = m1.ProductName,
+            //                productDescription = m1.ProductDescription,
+            //                productUntiId = m1.ProductUntiId,
+            //                productPrice = m1.ProductPrice
+            //            });
+            //        }
+            //    }
+            //    else
+            //    {
+            //        var res = Products.Where(w => w.ProductPrice >= Above && w.ProductPrice <= Below)
+            //            .Where(w => w.ProductStatusId.ToString().Contains(StatusId)
+            //            || w.ProductTypeId.ToString().Contains(Type)
+            //            || w.ProductCode.Contains(ProductCode)
+            //            || w.ProductName.Contains(ProductName)
+            //            || w.ProductDescription.Contains(Description)
+            //            || w.ProductUntiId.ToString().Contains(Unit))
+            //            .ToList();
+            //        foreach (var m1 in res)
+            //        {
+            //            models.Add(new m_productandservice_response
+            //            {
+            //                productId = m1.ProductId,
+            //                productStatusId = m1.ProductStatusId,
+            //                productTypeId = m1.ProductTypeId,
+            //                productCode = m1.ProductCode,
+            //                productName = m1.ProductName,
+            //                productDescription = m1.ProductDescription,
+            //                productUntiId = m1.ProductUntiId,
+            //                productPrice = m1.ProductPrice
+            //            });
+            //        }
+            //    }
+            //}
             return models;
         }
 

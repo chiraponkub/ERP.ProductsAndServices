@@ -127,11 +127,7 @@ namespace erp_project.Libraries.Concretes
 
                     foreach (var Product in retureProductList)
                     {
-                        var tbl_newAddon = tbl_Addon.Select(s => new
-                        {
-                            AddonId = s.AddonId,
-                            ProductCodeList = string.Join("-", s.ProductCode.Split("-").Where(w => w != "Code").ToList())
-                        }).ToList();
+
                         var keylist = Product.Keys;
                         List<m_ProductAttributeValueModels> ListAttributeStr = new List<m_ProductAttributeValueModels>();
                         foreach (var key in keylist)
@@ -151,6 +147,11 @@ namespace erp_project.Libraries.Concretes
                                 });
                             }
                         }
+                        var tbl_newAddon = tbl_Addon.Select(s => new
+                        {
+                            AddonId = s.AddonId,
+                            ProductCodeList = string.Join("-", s.ProductCode.Split("-").Where(w => w != product.ProductCode).ToList())
+                        }).ToList();
 
                         int? tbl_AddonID = tbl_newAddon
                             .Where(w => w.ProductCodeList == Product["Code"]
@@ -159,6 +160,7 @@ namespace erp_project.Libraries.Concretes
                             .GetValue(Product["Code"], null)
                             .ToString())
                             .FirstOrDefault()?.AddonId;
+
 
                         foreach (var AttributeStr in ListAttributeStr)
                         {
