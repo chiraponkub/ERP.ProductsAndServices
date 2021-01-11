@@ -38,29 +38,28 @@ namespace erp_project.Libraries.Concretes
             List<m_productandservice_response> models = new List<m_productandservice_response>();
 
 
-            string Price = $" AND Price IS NOT NULL AND DomainId = {domainId}";
+            string Price = $" AND ProductPrice IS NOT NULL AND DomainId = {domainId}";
             if (Above != null && Below != null)
             {
-                Price += $" AND Price BETWEEN {Above} AND {Below}";
+                Price += $" AND ProductPrice BETWEEN {Above} AND {Below}";
             }
             else if (Above != null && Below == null)
             {
-                Price += $" AND Price >= {Above}";
+                Price += $" AND ProductPrice >= {Above}";
             }
             else if (Above == null && Below != null)
             {
-                Price += $" AND Price <= {Below}";
+                Price += $" AND ProductPrice <= {Below}";
             }
 
-            var retrue = db.GetProductAndServices.FromSqlRaw($"Exec [productAndService].[AdvancedSearchProduct] @domainId,@StatusId,@Type,@ProductCode,@ProductName,@ProductDescription,@ProductUntiId,@Price",
-                new SqlParameter("@domainId", domainId ?? (object)DBNull.Value),
+            var retrue = db.GetProductAndServices.FromSqlRaw($"Exec [productAndService].[AdvancedSearchProduct] @StatusId,@Type,@ProductCode,@ProductName,@ProductDescription,@ProductUntiId,@ProductPrice",
                 new SqlParameter("@StatusId", StatusId ?? (object)DBNull.Value),
                 new SqlParameter("@Type", Type ?? (object)DBNull.Value),
                 new SqlParameter("@ProductCode", ProductCode ?? (object)DBNull.Value),
                 new SqlParameter("@ProductName", ProductName ?? (object)DBNull.Value),
                 new SqlParameter("@ProductDescription", Description ?? (object)DBNull.Value),
                 new SqlParameter("@ProductUntiId", ProductUntiId ?? (object)DBNull.Value),
-                new SqlParameter("@Price" , Price ?? (object)DBNull.Value)
+                new SqlParameter("@ProductPrice", Price ?? (object)DBNull.Value)
                 ).ToList();
 
             foreach (var m1 in retrue)
@@ -77,6 +76,8 @@ namespace erp_project.Libraries.Concretes
                     productPrice = m1.ProductPrice
                 });
             }
+            return models;
+
 
             //var Products = db.Products.Where(f => f.DomainId.ToString() == domainId && f.ProductActive == true);
             //if (
@@ -209,7 +210,7 @@ namespace erp_project.Libraries.Concretes
             //        }
             //    }
             //}
-            return models;
+            //return models;
         }
 
         public List<m_priceSetting_GetDataPrice_response> GetDataPrice(
@@ -247,6 +248,7 @@ namespace erp_project.Libraries.Concretes
                     db.SaveChanges();
                 }
             }
+
             string AddonPrice = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId}";
             if (Above != null && Below != null)
             {
