@@ -36,7 +36,7 @@ namespace erp_project.Libraries.Concretes
             )
         {
             List<m_productandservice_response> models = new List<m_productandservice_response>();
-            var Products = db.Products.Where(f => f.DomainId.ToString() == domainId);
+            var Products = db.Products.Where(f => f.DomainId.ToString() == domainId && f.ProductActive == true);
             if (
                 string.IsNullOrEmpty(StatusId)
                 && string.IsNullOrEmpty(Type)
