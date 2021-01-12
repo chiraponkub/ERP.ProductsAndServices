@@ -92,7 +92,7 @@ namespace erp_project.Libraries.Concretes
                         db.SaveChanges();
                     }
                     int count1 = 0;
-                    var Images = db.ProductAddons.Where(f => f.AddonId == product.ProductId).ToList();
+                    var Images = db.ProductAddons.Where(f => f.ProductId == product.ProductId).ToList();
                     foreach (var mm1 in Images)
                     {
                         int count2 = 0;
