@@ -47,6 +47,7 @@ namespace erp_project.Controllers
                 string image;
                 ERPHttpResponse<List<m_uploadimage>> p_image = new ERPHttpResponse<List<m_uploadimage>>();
                 ERPHttpResponse<List<m_uploadimage>> List_image = new ERPHttpResponse<List<m_uploadimage>>();
+
                 if (req.files != null && req.files.Count() > 0)
                 {
                     if (req.files.Count() > 1)

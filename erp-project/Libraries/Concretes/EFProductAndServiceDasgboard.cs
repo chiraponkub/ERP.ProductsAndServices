@@ -38,7 +38,7 @@ namespace erp_project.Libraries.Concretes
             List<m_productandservice_response> models = new List<m_productandservice_response>();
 
 
-            string Price = $" AND ProductPrice IS NOT NULL OR ProductDescription IS NULL";
+            string Price = $" AND ProductPrice IS NOT NULL";
             if (Above != null && Below != null)
             {
                 Price += $" AND ProductPrice BETWEEN {Above} AND {Below}";
@@ -116,7 +116,7 @@ namespace erp_project.Libraries.Concretes
                 }
             }
 
-            string AddonPrice = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId} OR AddonDescription IS NULL";
+            string AddonPrice = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId}";
             if (Above != null && Below != null)
             {
                 AddonPrice += $" AND AddonPrice BETWEEN {Above} AND {Below}";

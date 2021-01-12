@@ -96,14 +96,17 @@ namespace erp_project.Libraries.Concretes
                     foreach (var mm1 in Images)
                     {
                         int count2 = 0;
-                        foreach (var image in Attributeimage)
+                        if (Attributeimage != null)
                         {
-                            if (count1 == count2)
+                            foreach (var image in Attributeimage)
                             {
-                                var es = db.ProductAddons.FirstOrDefault(f => f.AddonId == mm1.AddonId);
-                                es.AddonImage = image;
-                                db.SaveChanges();
-                                break;
+                                if (count1 == count2)
+                                {
+                                    var es = db.ProductAddons.FirstOrDefault(f => f.AddonId == mm1.AddonId);
+                                    es.AddonImage = image;
+                                    db.SaveChanges();
+                                    break;
+                                }
                             }
                             count2++;
                         }
