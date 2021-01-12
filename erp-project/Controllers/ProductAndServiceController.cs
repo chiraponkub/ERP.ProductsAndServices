@@ -60,32 +60,35 @@ namespace erp_project.Controllers
                         return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
                     image = p_image.data[0].fullPath;
 
-                    List<string> Attributeimage = new List<string>();
-                    foreach (m_productandservice_Addon_request m1 in req.addon)
+                    if (req.addon != null)
                     {
-                        if (m1.files != null && m1.files.Count() > 0)
+                        List<string> Attributeimage = new List<string>();
+                        foreach (m_productandservice_Addon_request m1 in req.addon)
                         {
-
-                            List<IFormFile> files = new List<IFormFile>();
-
-                            IFormFile adasd = m1.files[0];
-
-                            Stream Streamfile = adasd.OpenReadStream();
-
-                            IFormFile ss = new FormFile(Streamfile, 0, Streamfile.Length, "files", adasd.FileName)
+                            if (m1.files != null && m1.files.Count() > 0)
                             {
-                                Headers = adasd.Headers
-                            };
-                            files.Add(ss);
 
-                            List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", files).Result.Content;
-                            //List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"https://localhost:5004/api/Upload/Uploadimg", files).Result.Content;
-                            if (List_image.message != "Ok" || List_image.data.Count() != 1)
-                                return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
-                            Attributeimage.Add(List_image.data[0].fullPath);
+                                List<IFormFile> files = new List<IFormFile>();
+
+                                IFormFile adasd = m1.files[0];
+
+                                Stream Streamfile = adasd.OpenReadStream();
+
+                                IFormFile ss = new FormFile(Streamfile, 0, Streamfile.Length, "files", adasd.FileName)
+                                {
+                                    Headers = adasd.Headers
+                                };
+                                files.Add(ss);
+
+                                List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", files).Result.Content;
+                                //List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"https://localhost:5004/api/Upload/Uploadimg", files).Result.Content;
+                                if (List_image.message != "Ok" || List_image.data.Count() != 1)
+                                    return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
+                                Attributeimage.Add(List_image.data[0].fullPath);
+                            }
                         }
+                        return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
                     }
-                    return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
                 }
                 return Ok(IProductAndService.addProductAndService(req, null, null));
             }
@@ -95,7 +98,7 @@ namespace erp_project.Controllers
             }
         }
 
-        
+
 
         /// <summary>
         /// ตัวอย่างรูปแบบการส่งข้อมูลแบบ Json ใน AddProduct
@@ -193,7 +196,7 @@ namespace erp_project.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPut("EditaddonPrice{GroupPriceId}")]
-        public ActionResult EditaddonPrice(int GroupPriceId ,List<EditPrice> req) 
+        public ActionResult EditaddonPrice(int GroupPriceId, List<EditPrice> req)
         {
             try
             {

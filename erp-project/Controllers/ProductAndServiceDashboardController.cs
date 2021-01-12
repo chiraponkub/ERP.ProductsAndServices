@@ -74,6 +74,11 @@ namespace erp_project.Controllers
             }
         }
 
+        /// <summary>
+        /// ดึงข้อมูล ProductsAndServices มาแสดงเพื่อแก้ไข
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("GetEditProducts/{ProductId}")]
         public ActionResult View_Attribute(int ProductId)
