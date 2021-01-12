@@ -203,7 +203,7 @@ namespace erp_project.Libraries.Concretes
                 models.addon.Add(new m_Edit_productandservice_Addon_request
                 {
                     files = m1.AddonImage  ?? null,
-                    productCodeOnValue = m1.ProductCode,
+                    productCodeOnValue = m1.Attribute,
                     valueDescription = m1.AddonDescription,
                     price = m1.AddonPrice,
                     status = m1.AddonStatus
