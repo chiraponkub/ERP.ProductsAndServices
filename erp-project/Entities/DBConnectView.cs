@@ -9,6 +9,7 @@ namespace erp_project.Entities
     public partial class DBConnect : DbContext
     {
         public virtual DbSet<GetDataAddon> GetDataAddon { get; set; }
+        public virtual DbSet<GetDataAddonDetails> GetDataAddonDetails { get; set; }
         public virtual DbSet<GetProductAndServices> GetProductAndServices { get; set; }
     }
 }

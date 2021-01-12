@@ -18,6 +18,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[productAndService].[GetDataAddonDetails]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[productAndService].[GetProductAndServices]"
       }
    ],

@@ -162,6 +162,10 @@ namespace erp_project.Libraries.Concretes
         {
             var products = db.GetProductAndServices.FirstOrDefault(f => f.ProductId == ProductId);
             m_Edit_productandservice_main_request models = new m_Edit_productandservice_main_request();
+            if (products == null)
+            {
+                throw new Exception("ProductId Null");
+            }
             models.productsId = products.ProductId;
             models.productName = products.ProductName;
             models.productTypeId = products.ProductTypeId;
@@ -171,6 +175,7 @@ namespace erp_project.Libraries.Concretes
             models.productDescription = products.ProductDescription;
             models.productPrice = products.ProductPrice;
             models.files = products.ProductImage ?? null;
+            models.domainId = products.DomainId;
             models.attribute = new List<m_Edit_productandservice_attributeName_request>();
             models.addon = new List<m_Edit_productandservice_Addon_request>();
 
@@ -197,18 +202,34 @@ namespace erp_project.Libraries.Concretes
             }
 
             var getdataAddon = db.GetDataAddon.Where(w => w.ProductId == ProductId).ToList();
-
             foreach (var m1 in getdataAddon)
             {
+                List<m_Edit_productandservice_AddonDetails_request> AddonDetails = new List<m_Edit_productandservice_AddonDetails_request>();
+                var getdataaddonDetails = db.GetDataAddonDetails.Where(w => w.AddonId == m1.AddonId).ToList();
+                foreach (var m2 in getdataaddonDetails)
+                {
+                    AddonDetails.Add(new m_Edit_productandservice_AddonDetails_request
+                    {
+                        Attributes = m2.AttibuteName,
+                        AttributesValues = m2.ValueName
+                    });
+                }
                 models.addon.Add(new m_Edit_productandservice_Addon_request
                 {
-                    files = m1.AddonImage  ?? null,
+                    files = m1.AddonImage ?? null,
                     productCodeOnValue = m1.Attribute,
                     valueDescription = m1.AddonDescription,
                     price = m1.AddonPrice,
-                    status = m1.AddonStatus
+                    status = m1.AddonStatus,
+                    AttributesDetails = AddonDetails
                 });
+
+
+
             }
+
+
+
 
             return models;
         }

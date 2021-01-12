@@ -52,6 +52,13 @@ namespace erp_project.Libraries.Models.ProductAndService
         public decimal price { get; set; }
         public bool status { get; set; }
         public string productCodeOnValue { get; set; }
+        public List<m_Edit_productandservice_AddonDetails_request> AttributesDetails { get; set; }
+    }
+
+    public class m_Edit_productandservice_AddonDetails_request 
+    {
+        public string Attributes { get; set; }
+        public string AttributesValues { get; set; }
     }
 
 }

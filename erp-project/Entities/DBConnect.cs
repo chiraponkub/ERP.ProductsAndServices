@@ -126,6 +126,13 @@ namespace erp_project.Entities
                 entity.ToView("GetDataAddon", "productAndService");
             });
 
+            modelBuilder.Entity<GetDataAddonDetails>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetDataAddonDetails", "productAndService");
+            });
+
             modelBuilder.Entity<GetProductAndServices>(entity =>
             {
                 entity.HasNoKey();
