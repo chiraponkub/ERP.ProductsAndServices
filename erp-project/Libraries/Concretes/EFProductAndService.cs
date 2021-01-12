@@ -46,6 +46,11 @@ namespace erp_project.Libraries.Concretes
                     db.Products.Add(product);
                     db.SaveChanges();
 
+                    if (req.attribute == null || req.addon == null)
+                    {
+                        return true;
+                    }
+
                     foreach (var m1 in req.attribute)
                     {
                         var attribute = new ProductAttributes
@@ -147,10 +152,12 @@ namespace erp_project.Libraries.Concretes
                                 });
                             }
                         }
+
+
                         var tbl_newAddon = tbl_Addon.Select(s => new
                         {
                             AddonId = s.AddonId,
-                            ProductCodeList = string.Join("-", s.ProductCode.Split("-").Where(w => w != product.ProductCode).ToList())
+                            ProductCodeList = string.Join("", s.ProductCode.Split(product.ProductCode + "-").Where(w => w != product.ProductCode).ToList())
                         }).ToList();
 
                         int? tbl_AddonID = tbl_newAddon
@@ -180,6 +187,22 @@ namespace erp_project.Libraries.Concretes
                 catch (Exception ex)
                 {
                     Transaction.Rollback();
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
+        public bool editProductAndSerivce(m_productandservice_main_request req, string productimage, List<string> Attributeimage)
+        {
+            using (var Transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
                     throw new Exception(ex.Message);
                 }
             }
