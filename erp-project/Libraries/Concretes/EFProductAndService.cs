@@ -48,6 +48,7 @@ namespace erp_project.Libraries.Concretes
 
                     if (req.attribute == null || req.addon == null)
                     {
+                        Transaction.Commit();
                         return true;
                     }
 
@@ -167,7 +168,6 @@ namespace erp_project.Libraries.Concretes
                             .GetValue(Product["Code"], null)
                             .ToString())
                             .FirstOrDefault()?.AddonId;
-
 
                         foreach (var AttributeStr in ListAttributeStr)
                         {
