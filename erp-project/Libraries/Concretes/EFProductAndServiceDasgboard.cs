@@ -223,14 +223,7 @@ namespace erp_project.Libraries.Concretes
                     status = m1.AddonStatus,
                     AttributesDetails = AddonDetails
                 });
-
-
-
             }
-
-
-
-
             return models;
         }
         public List<m_priceSetting_response> getprice(int domainId)
