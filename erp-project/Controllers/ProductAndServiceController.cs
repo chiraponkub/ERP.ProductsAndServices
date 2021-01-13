@@ -100,12 +100,12 @@ namespace erp_project.Controllers
         }
 
         /// <summary>
-        /// เพิ่ม ProductAndService 
+        /// แก้ไข ProductAndService
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("EditProductAndService")]
+        [HttpPut("EditProductAndService/{ProductsId}")]
         public ActionResult EditProductAndService([FromForm] m_productandservice_main_request req)
         {
             try

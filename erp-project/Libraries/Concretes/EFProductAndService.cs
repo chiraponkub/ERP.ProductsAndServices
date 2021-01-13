@@ -200,7 +200,7 @@ namespace erp_project.Libraries.Concretes
             {
                 try
                 {
-                    var Find = db.Products.FirstOrDefault(f => f.ProductId == req.productsId);
+                    var Find = db.Products.FirstOrDefault(f => f.ProductId == req.ProductsId);
                     if (Find == null)
                     {
                         throw new Exception("ProductId Not Found");
