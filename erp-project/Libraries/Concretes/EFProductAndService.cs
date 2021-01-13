@@ -317,9 +317,9 @@ namespace erp_project.Libraries.Concretes
 
                         Transaction.Commit();
 
-                        var tbl_attributes = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId).ToList();
-                        var tbl_Addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId).ToList();
-                        var tbl_values = db.ProductAttributeValues.Where(w => tbl_attributes.Select(s => s.AttributeId).Contains(w.AttributeId)).ToList();
+                        var tbl_attributes = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId && w.AttributeActive == true).ToList();
+                        var tbl_Addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId && w.AddonActive == true).ToList();
+                        var tbl_values = db.ProductAttributeValues.Where(w => w.ValueActive == true && tbl_attributes.Select(s => s.AttributeId).Contains(w.AttributeId)).ToList();
                         var res = (from proatt in tbl_attributes
                                    where proatt.ProductId == Find.ProductId
                                    select new ProductAttributeModel
