@@ -119,7 +119,7 @@ namespace erp_project.Libraries.Concretes
             string AddonPrice = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId}";
             if (Above != null && Below != null)
             {
-                AddonPrice += $" AND AddonPrice BETWEEN {Above} AND {Below}";
+                AddonPrice += $" AND AddonPrice BETWEEN {Below} AND {Above} ";
             }
             else if (Above != null && Below == null)
             {
