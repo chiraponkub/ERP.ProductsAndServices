@@ -104,6 +104,7 @@ namespace erp_project.Controllers
         /// แก้ไข ProductAndService
         /// </summary>
         /// <param name="req"></param>
+        /// <param name="ProductsId"></param>
         /// <returns></returns>
         [Authorize]
         [HttpPut("EditProductAndService/{ProductsId}")]

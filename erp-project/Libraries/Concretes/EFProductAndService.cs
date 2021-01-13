@@ -536,20 +536,23 @@ namespace erp_project.Libraries.Concretes
         public bool unit(m_unit_request res)
         {
             var check = db.ProductUnit.Where(f => f.DomainId == res.domainID).ToList();
-            foreach (var m1 in check)
+            if (check != null)
             {
-                if (m1.UnitCode == res.unitName)
+                foreach (var m1 in check)
                 {
-                    throw new Exception("ชื่อซ้ำ");
+                    if (m1.UnitCode == res.unitName)
+                    {
+                        throw new Exception("ชื่อซ้ำ");
+                    }
                 }
+                ProductUnit ss = new ProductUnit
+                {
+                    DomainId = res.domainID,
+                    UnitCode = res.unitName
+                };
+                db.ProductUnit.Add(ss);
+                db.SaveChanges();
             }
-            ProductUnit ss = new ProductUnit
-            {
-                DomainId = res.domainID,
-                UnitCode = res.unitName
-            };
-            db.ProductUnit.Add(ss);
-            db.SaveChanges();
             return true;
         }
         public bool editunit(int untiId, m_unit_edit_request res)
