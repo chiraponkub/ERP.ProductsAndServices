@@ -59,7 +59,7 @@ namespace erp_project.Libraries.Models.ProductAndService
 
     public class Edit_productandservice_main_request 
     {
-        public int productsId { get; set; }
+        //public int productsId { get; set; }
         public string productCode { get; set; }
         public string productName { get; set; }
         public int productTypeId { get; set; }

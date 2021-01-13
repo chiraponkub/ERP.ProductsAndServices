@@ -106,10 +106,14 @@ namespace erp_project.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPut("EditProductAndService/{ProductsId}")]
-        public ActionResult EditProductAndService([FromForm] m_productandservice_main_request req)
+        public ActionResult EditProductAndService([FromForm] Edit_productandservice_main_request req,int ProductsId)
         {
             try
             {
+                if (!ModelState.IsValid) 
+                {
+                    return BadRequest();
+                }
                 string image;
                 ERPHttpResponse<List<m_uploadimage>> p_image = new ERPHttpResponse<List<m_uploadimage>>();
                 ERPHttpResponse<List<m_uploadimage>> List_image = new ERPHttpResponse<List<m_uploadimage>>();
@@ -130,7 +134,7 @@ namespace erp_project.Controllers
                     if (req.addon != null)
                     {
                         List<string> Attributeimage = new List<string>();
-                        foreach (m_productandservice_Addon_request m1 in req.addon)
+                        foreach (Edit_productandservice_Addon_request m1 in req.addon)
                         {
                             if (m1.files != null && m1.files.Count() > 0)
                             {
@@ -154,10 +158,10 @@ namespace erp_project.Controllers
                                 Attributeimage.Add(List_image.data[0].fullPath);
                             }
                         }
-                        return Ok(IProductAndService.editProductAndSerivce(req, image, Attributeimage));
+                        return Ok(IProductAndService.editProductAndSerivce(req, image, Attributeimage , ProductsId));
                     }
                 }
-                return Ok(IProductAndService.editProductAndSerivce(req, null, null));
+                return Ok(IProductAndService.editProductAndSerivce(req, null, null, ProductsId));
             }
             catch (Exception ex)
             {

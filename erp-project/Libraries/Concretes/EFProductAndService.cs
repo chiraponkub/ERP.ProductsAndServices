@@ -194,13 +194,13 @@ namespace erp_project.Libraries.Concretes
                 }
             }
         }
-        public bool editProductAndSerivce(m_productandservice_main_request req, string productimage, List<string> Attributeimage)
+        public bool editProductAndSerivce(Edit_productandservice_main_request req, string productimage, List<string> Attributeimage, int ProductsId)
         {
             using (var Transaction = db.Database.BeginTransaction())
             {
                 try
                 {
-                    var Find = db.Products.FirstOrDefault(f => f.ProductId == req.ProductsId);
+                    var Find = db.Products.FirstOrDefault(f => f.ProductId == ProductsId);
                     if (Find == null)
                     {
                         throw new Exception("ProductId Not Found");
