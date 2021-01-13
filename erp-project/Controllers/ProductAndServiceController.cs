@@ -161,6 +161,7 @@ namespace erp_project.Controllers
                         }
                         return Ok(IProductAndService.editProductAndSerivce(req, image, Attributeimage , ProductsId));
                     }
+                    return Ok(IProductAndService.editProductAndSerivce(req, image, null, ProductsId));
                 }
                 return Ok(IProductAndService.editProductAndSerivce(req, null, null, ProductsId));
             }
