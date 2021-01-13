@@ -90,6 +90,7 @@ namespace erp_project.Controllers
                         }
                         return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
                     }
+                    return Ok(IProductAndService.addProductAndService(req, image, null));
                 }
                 return Ok(IProductAndService.addProductAndService(req, null, null));
             }
