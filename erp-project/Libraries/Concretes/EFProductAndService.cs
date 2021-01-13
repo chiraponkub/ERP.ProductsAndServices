@@ -200,12 +200,199 @@ namespace erp_project.Libraries.Concretes
             {
                 try
                 {
+                    var Find = db.Products.FirstOrDefault(f => f.ProductId == req.productsId);
+                    if (Find == null)
+                    {
+                        throw new Exception("ProductId Not Found");
+                    }
+                    Find.ProductName = req.productName;
+                    Find.ProductTypeId = req.productTypeId;
+                    Find.ProductCode = req.productCode;
+                    Find.ProductImage = string.IsNullOrEmpty(productimage) ? Find.ProductImage : productimage;
+                    Find.ProductStatusId = req.productStatusId;
+                    Find.ProductUntiId = req.productUntiId;
+                    Find.ProductDescription = req.productDescription;
+                    Find.ProductPrice = req.productPrice;
+                    db.SaveChanges();
+                    if (req.attribute == null || req.addon == null)
+                    {
+                        var att = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId).ToList();
+                        if (att != null)
+                        {
+                            foreach (var m1 in att)
+                            {
+                                m1.AttributeActive = false;
+                                db.SaveChanges();
+
+                                var val = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId).ToList();
+                                foreach (var m2 in val)
+                                {
+                                    m2.ValueActive = false;
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
+                        Transaction.Commit();
+                        return true;
+                    }
+                    else
+                    {
+                        var att = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId).ToList();
+                        if (att != null)
+                        {
+                            foreach (var m1 in att)
+                            {
+                                m1.AttributeActive = false;
+                                db.SaveChanges();
+
+                                var val = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId).ToList();
+                                foreach (var m2 in val)
+                                {
+                                    m2.ValueActive = false;
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
+
+                        foreach (var m1 in req.attribute)
+                        {
+                            var attribute = new ProductAttributes
+                            {
+                                ProductId = Find.ProductId,
+                                AttibuteName = m1.attibuteName,
+                                AttributeActive = true
+                            };
+                            db.ProductAttributes.Add(attribute);
+                            db.SaveChanges();
+
+                            foreach (var m2 in m1.value)
+                            {
+                                var value = new ProductAttributeValues
+                                {
+                                    AttributeId = attribute.AttributeId,
+                                    ValueName = m2.valueName,
+                                    ValueActive = true
+                                };
+                                db.ProductAttributeValues.Add(value);
+                                db.SaveChanges();
+                            }
+                        }
+
+                        foreach (var m3 in req.addon)
+                        {
+                            var addOn = new ProductAddons
+                            {
+                                ProductId = Find.ProductId,
+                                AddonImage = null,
+                                AddonDescription = m3.valueDescription,
+                                AddonActive = true,
+                                AddonStatus = m3.status,
+                                AddonPrice = m3.price,
+                                ProductCode = m3.productCodeOnValue
+                            };
+                            db.ProductAddons.Add(addOn);
+                            db.SaveChanges();
+                        }
+                        int count1 = 0;
+                        var Images = db.ProductAddons.Where(f => f.ProductId == Find.ProductId).ToList();
+                        foreach (var mm1 in Images)
+                        {
+                            int count2 = 0;
+                            if (Attributeimage != null)
+                            {
+                                foreach (var image in Attributeimage)
+                                {
+                                    if (count1 == count2)
+                                    {
+                                        var es = db.ProductAddons.FirstOrDefault(f => f.AddonId == mm1.AddonId);
+                                        es.AddonImage = image;
+                                        db.SaveChanges();
+                                        break;
+                                    }
+                                }
+                                count2++;
+                            }
+                            count1++;
+                        }
+
+                        Transaction.Commit();
+
+                        var tbl_attributes = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId).ToList();
+                        var tbl_Addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId).ToList();
+                        var tbl_values = db.ProductAttributeValues.Where(w => tbl_attributes.Select(s => s.AttributeId).Contains(w.AttributeId)).ToList();
+                        var res = (from proatt in tbl_attributes
+                                   where proatt.ProductId == Find.ProductId
+                                   select new ProductAttributeModel
+                                   {
+                                       AttrId = proatt.AttributeId,
+                                       AttrName = proatt.AttibuteName,
+                                       Values = (from provalue in tbl_values
+                                                 where provalue.AttributeId == proatt.AttributeId
+                                                 select new ProductAttributeValueModel
+                                                 {
+                                                     ValueId = provalue.ValueId,
+                                                     ValueName = provalue.ValueName
+                                                 }).ToList()
+                                   }).Distinct().ToList();
+                        var retureProductList = ProductAddonExtesion.GetProductAddons(res).ToList();
+
+                        foreach (var Product in retureProductList)
+                        {
+
+                            var keylist = Product.Keys;
+                            List<m_ProductAttributeValueModels> ListAttributeStr = new List<m_ProductAttributeValueModels>();
+                            foreach (var key in keylist)
+                            {
+                                if (key.ToLower() != "code")
+                                {
+                                    var valuesObj = Product[key];
+                                    ProductAttributeValueModel m = (ProductAttributeValueModel)(Product[key].GetType().GetProperty("m").GetValue(Product[key], null));
+                                    var valueData = tbl_values.Where(w => w.ValueId == m.ValueId).SingleOrDefault();
+                                    var attributeData = tbl_attributes.Where(w => w.AttributeId == valueData.AttributeId).FirstOrDefault();
+                                    ListAttributeStr.Add(new m_ProductAttributeValueModels
+                                    {
+                                        AttributeId = valueData.AttributeId,
+                                        ValueId = valueData.ValueId,
+                                        ValueName = valueData.ValueName,
+                                        AttibuteName = attributeData.AttibuteName
+                                    });
+                                }
+                            }
 
 
+                            var tbl_newAddon = tbl_Addon.Select(s => new
+                            {
+                                AddonId = s.AddonId,
+                                ProductCodeList = string.Join("", s.ProductCode.Split(Find.ProductCode + "-").Where(w => w != Find.ProductCode).ToList())
+                            }).ToList();
+
+                            int? tbl_AddonID = tbl_newAddon
+                                .Where(w => w.ProductCodeList == Product["Code"]
+                                .GetType()
+                                .GetProperty("ValueName")
+                                .GetValue(Product["Code"], null)
+                                .ToString())
+                                .FirstOrDefault()?.AddonId;
+
+                            foreach (var AttributeStr in ListAttributeStr)
+                            {
+                                var saveaddon = new ProductAddonDetails
+                                {
+                                    AddonId = tbl_AddonID.Value,
+                                    AttributeId = AttributeStr.AttributeId,
+                                    ValueId = AttributeStr.ValueId,
+                                    Active = true
+                                };
+                                db.ProductAddonDetails.Add(saveaddon);
+                                db.SaveChanges();
+                            }
+                        }
+                    }
                     return true;
                 }
                 catch (Exception ex)
                 {
+                    Transaction.Rollback();
                     throw new Exception(ex.Message);
                 }
             }

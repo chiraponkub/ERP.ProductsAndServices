@@ -99,6 +99,71 @@ namespace erp_project.Controllers
             }
         }
 
+        /// <summary>
+        /// เพิ่ม ProductAndService 
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("EditProductAndService")]
+        public ActionResult EditProductAndService([FromForm] m_productandservice_main_request req)
+        {
+            try
+            {
+                string image;
+                ERPHttpResponse<List<m_uploadimage>> p_image = new ERPHttpResponse<List<m_uploadimage>>();
+                ERPHttpResponse<List<m_uploadimage>> List_image = new ERPHttpResponse<List<m_uploadimage>>();
+
+                if (req.files != null && req.files.Count() > 0)
+                {
+                    if (req.files.Count() > 1)
+                        return BadRequest("ไม่สามารถอัพรูปโปรไฟล์ได้มากว่า 1 รูป");
+
+                    HttpService.Authorization(UserAuthorization);
+                    string host = Configuration.GetValue<string>("BE_HOST");
+                    //p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"https://localhost:5004/api/Upload/Uploadimg", req.files).Result.Content;
+                    p_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", req.files).Result.Content;
+                    if (p_image.message != "Ok" || p_image.data.Count() != 1)
+                        return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
+                    image = p_image.data[0].fullPath;
+
+                    if (req.addon != null)
+                    {
+                        List<string> Attributeimage = new List<string>();
+                        foreach (m_productandservice_Addon_request m1 in req.addon)
+                        {
+                            if (m1.files != null && m1.files.Count() > 0)
+                            {
+
+                                List<IFormFile> files = new List<IFormFile>();
+
+                                IFormFile adasd = m1.files[0];
+
+                                Stream Streamfile = adasd.OpenReadStream();
+
+                                IFormFile ss = new FormFile(Streamfile, 0, Streamfile.Length, "files", adasd.FileName)
+                                {
+                                    Headers = adasd.Headers
+                                };
+                                files.Add(ss);
+
+                                List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"{host}/rest-resource/api/Upload/Uploadimg", files).Result.Content;
+                                //List_image = HttpService.PostFile<ERPHttpResponse<List<m_uploadimage>>>($"https://localhost:5004/api/Upload/Uploadimg", files).Result.Content;
+                                if (List_image.message != "Ok" || List_image.data.Count() != 1)
+                                    return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
+                                Attributeimage.Add(List_image.data[0].fullPath);
+                            }
+                        }
+                        return Ok(IProductAndService.editProductAndSerivce(req, image, Attributeimage));
+                    }
+                }
+                return Ok(IProductAndService.editProductAndSerivce(req, null, null));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
         /// <summary>

@@ -55,6 +55,46 @@ namespace erp_project.Libraries.Models.ProductAndService
         public string AttibuteName { get; set; }
     }
 
+
+
+    public class Edit_productandservice_main_request 
+    {
+        public int productsId { get; set; }
+        public string productCode { get; set; }
+        public string productName { get; set; }
+        public int productTypeId { get; set; }
+        public string productDescription { get; set; }
+        public decimal productPrice { get; set; }
+        public List<IFormFile> files { get; set; }
+        public int productUntiId { get; set; }
+        public int productStatusId { get; set; }
+        public int domainId { get; set; }
+        public List<Edit_productandservice_attributeName_request> attribute { get; set; }
+        public List<Edit_productandservice_Addon_request> addon { get; set; }
+    }
+
+    public class Edit_productandservice_attributeName_request
+    {
+        public string attibuteName { get; set; }
+        public List<Edit_productandservice_AttributeValue_request> value { get; set; }
+    }
+
+    public class Edit_productandservice_AttributeValue_request
+    {
+        public string valueName { get; set; }
+    }
+
+    public class Edit_productandservice_Addon_request
+    {
+        public List<IFormFile> files { get; set; }
+        public string valueDescription { get; set; }
+        public int price { get; set; }
+        public bool status { get; set; }
+        public string productCodeOnValue { get; set; }
+    }
+
+
+
     public class m_uploadimage
     {
         /// <summary>
