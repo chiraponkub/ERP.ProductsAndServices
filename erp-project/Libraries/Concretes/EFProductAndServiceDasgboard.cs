@@ -180,12 +180,12 @@ namespace erp_project.Libraries.Concretes
             models.addon = new List<m_Edit_productandservice_Addon_request>();
 
             var attribute = (from patt in db.ProductAttributes
-                             where patt.ProductId == ProductId
+                             where patt.ProductId == ProductId && patt.AttributeActive == true
                              select new m_Edit_productandservice_attributeName_request
                              {
                                  attibuteName = patt.AttibuteName,
                                  value = (from val in db.ProductAttributeValues
-                                          where val.AttributeId == patt.AttributeId
+                                          where val.AttributeId == patt.AttributeId && val.ValueActive == true
                                           select new m_Edit_productandservice_AttributeValue_request
                                           {
                                               valueName = val.ValueName
@@ -205,7 +205,7 @@ namespace erp_project.Libraries.Concretes
             foreach (var m1 in getdataAddon)
             {
                 List<m_Edit_productandservice_AddonDetails_request> AddonDetails = new List<m_Edit_productandservice_AddonDetails_request>();
-                var getdataaddonDetails = db.GetDataAddonDetails.Where(w => w.AddonId == m1.AddonId).ToList();
+                var getdataaddonDetails = db.GetDataAddonDetails.Where(w => w.AddonId == m1.AddonId && w.ValueActive == true && w.AttributeActive == true).ToList();
                 foreach (var m2 in getdataaddonDetails)
                 {
                     AddonDetails.Add(new m_Edit_productandservice_AddonDetails_request
