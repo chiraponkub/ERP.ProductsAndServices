@@ -10,7 +10,7 @@ namespace erp_project.Libraries.Abstracts
 {
     public interface IProductAndService
     {
-        bool addProductAndService(m_productandservice_main_request req, string productimage, List<string> Attributeimage);
+        int addProductAndService(m_productandservice_main_request req, string productimage, List<string> Attributeimage);
         bool editProductAndSerivce(Edit_productandservice_main_request req, string productimage, List<string> Attributeimage, int ProductsId);
         bool delProductAndService(int ProductID);
         bool addPrice(m_priceSetting_request req);

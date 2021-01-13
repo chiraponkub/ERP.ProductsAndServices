@@ -21,7 +21,7 @@ namespace erp_project.Libraries.Concretes
             this.db = db;
         }
 
-        public bool addProductAndService(m_productandservice_main_request req, string productimage, List<string> Attributeimage)
+        public int addProductAndService(m_productandservice_main_request req, string productimage, List<string> Attributeimage)
         {
             using (var Transaction = db.Database.BeginTransaction())
             {
@@ -49,7 +49,7 @@ namespace erp_project.Libraries.Concretes
                     if (req.attribute == null || req.addon == null)
                     {
                         Transaction.Commit();
-                        return true;
+                        return product.ProductId;
                     }
 
                     foreach (var m1 in req.attribute)
@@ -185,7 +185,7 @@ namespace erp_project.Libraries.Concretes
                             db.SaveChanges();
                         }
                     }
-                    return true;
+                    return product.ProductId;
                 }
                 catch (Exception ex)
                 {
@@ -535,10 +535,13 @@ namespace erp_project.Libraries.Concretes
         }
         public bool unit(m_unit_request res)
         {
-            var check = db.ProductUnit.FirstOrDefault(f => f.DomainId == res.domainID);
-            if (check.UnitCode == res.unitName)
+            var check = db.ProductUnit.Where(f => f.DomainId == res.domainID).ToList();
+            foreach (var m1 in check)
             {
-                throw new Exception("ชื่อซ้ำ");
+                if (m1.UnitCode == res.unitName)
+                {
+                    throw new Exception("ชื่อซ้ำ");
+                }
             }
             ProductUnit ss = new ProductUnit
             {
