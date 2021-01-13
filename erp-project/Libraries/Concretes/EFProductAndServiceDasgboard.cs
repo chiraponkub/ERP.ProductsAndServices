@@ -41,7 +41,7 @@ namespace erp_project.Libraries.Concretes
             string Price = $" AND ProductPrice IS NOT NULL";
             if (Above != null && Below != null)
             {
-                Price += $" AND ProductPrice BETWEEN {Above} AND {Below}";
+                Price += $" AND ProductPrice BETWEEN {Below} AND {Above}";
             }
             else if (Above != null && Below == null)
             {
