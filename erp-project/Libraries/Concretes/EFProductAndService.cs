@@ -230,6 +230,13 @@ namespace erp_project.Libraries.Concretes
                                     m2.ValueActive = false;
                                     db.SaveChanges();
                                 }
+
+                                var addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId).ToList();
+                                foreach (var m3 in addon)
+                                {
+                                    m3.AddonActive = false;
+                                    db.SaveChanges();
+                                }
                             }
                         }
                         Transaction.Commit();
@@ -249,6 +256,13 @@ namespace erp_project.Libraries.Concretes
                                 foreach (var m2 in val)
                                 {
                                     m2.ValueActive = false;
+                                    db.SaveChanges();
+                                }
+
+                                var addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId).ToList();
+                                foreach (var m3 in addon)
+                                {
+                                    m3.AddonActive = false;
                                     db.SaveChanges();
                                 }
                             }
