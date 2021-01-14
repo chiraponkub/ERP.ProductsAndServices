@@ -45,6 +45,7 @@ namespace erp_project.Libraries.Concretes
                     };
                     db.Products.Add(product);
                     db.SaveChanges();
+                    var Images = db.ProductAddons.Where(f => f.ProductId == product.ProductId).ToList();
 
                     if (req.attribute == null || req.addon == null)
                     {
@@ -92,7 +93,6 @@ namespace erp_project.Libraries.Concretes
                         db.SaveChanges();
                     }
                     int count1 = 0;
-                    var Images = db.ProductAddons.Where(f => f.ProductId == product.ProductId).ToList();
                     foreach (var mm1 in Images)
                     {
                         int count2 = 0;
@@ -306,9 +306,38 @@ namespace erp_project.Libraries.Concretes
                             };
                             db.ProductAddons.Add(addOn);
                             db.SaveChanges();
+
+                            //if (Attributeimage != null)
+                            //{
+                            //    var ss = db.ProductAddons.FirstOrDefault(f => f.AddonId == addOn.AddonId);
+                            //    int count1 = 1;
+                            //    foreach (var image in Attributeimage)
+                            //    {
+                            //        if (m3.files.Count() == 1 && req.addon[count1] == count1)
+                            //        {
+                            //            var es = db.ProductAddons.FirstOrDefault(f => f.AddonId == addOn.AddonId);
+                            //            es.AddonImage = image;
+                            //            db.SaveChanges();
+                            //        }
+                            //        count1++;
+                            //    }
+                            //}
+
+
+
+                            //if (Attributeimage != null)
+                            //{
+                            //    foreach (var img in Attributeimage)
+                            //    {
+                            //        var ProductAddons = db.ProductAddons.FirstOrDefault(f => f.AddonId == addOn.AddonId);
+                            //        ProductAddons.AddonImage = img;
+                            //        db.SaveChanges();
+                            //    }
+                            //}
                         }
+                        var Images = db.ProductAddons.Where(f => f.ProductId == Find.ProductId && f.AddonActive == true).ToList();
                         int count1 = 0;
-                        var Images = db.ProductAddons.Where(f => f.ProductId == Find.ProductId).ToList();
+
                         foreach (var mm1 in Images)
                         {
                             int count2 = 0;
@@ -527,9 +556,19 @@ namespace erp_project.Libraries.Concretes
         {
             foreach (var m1 in req)
             {
-                var res = db.BindGroupPrice.FirstOrDefault(f => f.AddonId == m1.ProductAttributeId && f.GroupPriceId == GroupPriceId);
-                res.Price = m1.productPrice;
-                db.SaveChanges();
+                var check = db.GroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.SellingPriceDefault == true).FirstOrDefault();
+                if (check != null)
+                {
+                    var res = db.ProductAddons.FirstOrDefault(f => f.AddonId == m1.ProductAttributeId);
+                    res.AddonPrice = m1.productPrice;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var res = db.BindGroupPrice.FirstOrDefault(f => f.AddonId == m1.ProductAttributeId && f.GroupPriceId == GroupPriceId);
+                    res.Price = m1.productPrice;
+                    db.SaveChanges();
+                }
             }
             return true;
         }

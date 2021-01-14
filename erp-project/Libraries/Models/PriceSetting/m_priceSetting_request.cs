@@ -81,6 +81,6 @@ namespace erp_project.Libraries.Models.PriceSetting
     public class EditPrice 
     {
         public int ProductAttributeId { get; set; }
-        public decimal? productPrice { get; set; }
+        public decimal productPrice { get; set; }
     }
 }
