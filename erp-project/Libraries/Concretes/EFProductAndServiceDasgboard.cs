@@ -157,22 +157,45 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@AddonPrice", AddonPrice ?? (object)DBNull.Value)
                 ).ToList();
 
-            var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId).ToList();
-            var show = (from b in BindGroupPrice
-                        join a in retrue on b.AddonId equals a.AddonId
-                        select new m_priceSetting_GetDataPrice_response
-                        {
-                            ProductAttributeId = b.AddonId,
-                            productType = a.ProductTypeName,
-                            productCode = a.ProductCode,
-                            productName = a.ProductName,
-                            attribute = a.Attribute,
-                            productDescription = a.AddonDescription,
-                            productUnti = a.UnitCode,
-                            productPrice = b.Price,
-                            CurrencyCode = groupPrice.CurrencyCode
-                        }).ToList();
-            return show;
+
+            var checkDefault = db.GroupPrice.Where(w => w.SellingPriceDefault == true).FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
+            if (checkDefault != null)
+            {
+                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId).ToList();
+                var show = (from a in retrue 
+                            select new m_priceSetting_GetDataPrice_response
+                            {
+                                ProductAttributeId = a.AddonId,
+                                productType = a.ProductTypeName,
+                                productCode = a.ProductCode,
+                                productName = a.ProductName,
+                                attribute = a.Attribute,
+                                productDescription = a.AddonDescription,
+                                productUnti = a.UnitCode,
+                                productPrice = a.AddonPrice,
+                                CurrencyCode = groupPrice.CurrencyCode
+                            }).ToList();
+                return show;
+            }
+            else
+            {
+                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId).ToList();
+                var show = (from b in BindGroupPrice
+                            join a in retrue on b.AddonId equals a.AddonId
+                            select new m_priceSetting_GetDataPrice_response
+                            {
+                                ProductAttributeId = b.AddonId,
+                                productType = a.ProductTypeName,
+                                productCode = a.ProductCode,
+                                productName = a.ProductName,
+                                attribute = a.Attribute,
+                                productDescription = a.AddonDescription,
+                                productUnti = a.UnitCode,
+                                productPrice = b.Price,
+                                CurrencyCode = groupPrice.CurrencyCode
+                            }).ToList();
+                return show;
+            }
         }
 
         public m_Edit_productandservice_main_request Edit_GetProduct(int ProductId)
