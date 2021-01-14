@@ -100,23 +100,36 @@ namespace erp_project.Libraries.Concretes
 
             foreach (var m1 in DataAddon)
             {
-                var check = db.BindGroupPrice.Where(w => w.AddonId == m1.AddonId 
-                && w.GroupPriceId == GroupPriceId 
-                && w.Active == true 
-                && w.DomainId == domainId).FirstOrDefault();
-
+                var check = db.BindGroupPrice.Where(w => w.AddonId == m1.AddonId && w.GroupPriceId == GroupPriceId && w.Active == true && w.DomainId == domainId).FirstOrDefault();
                 if (check == null)
                 {
-                    var save = new BindGroupPrice
+                    var CheckPrice = db.GroupPrice.Where(w => w.SellingPriceDefault == true).FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
+                    if (CheckPrice != null)
                     {
-                        AddonId = m1.AddonId,
-                        GroupPriceId = GroupPriceId,
-                        DomainId = domainId,
-                        Price = 0,
-                        Active = true
-                    };
-                    db.BindGroupPrice.Add(save);
-                    db.SaveChanges();
+                        var save = new BindGroupPrice
+                        {
+                            AddonId = m1.AddonId,
+                            GroupPriceId = GroupPriceId,
+                            DomainId = domainId,
+                            Price = m1.AddonPrice,
+                            Active = true
+                        };
+                        db.BindGroupPrice.Add(save);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        var save = new BindGroupPrice
+                        {
+                            AddonId = m1.AddonId,
+                            GroupPriceId = GroupPriceId,
+                            DomainId = domainId,
+                            Price = 0,
+                            Active = true
+                        };
+                        db.BindGroupPrice.Add(save);
+                        db.SaveChanges();
+                    }
                 }
             }
 
