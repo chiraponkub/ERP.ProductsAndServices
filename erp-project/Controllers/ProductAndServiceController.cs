@@ -68,7 +68,6 @@ namespace erp_project.Controllers
                         {
                             if (m1.files != null && m1.files.Count() > 0)
                             {
-
                                 List<IFormFile> files = new List<IFormFile>();
 
                                 IFormFile adasd = m1.files[0];
@@ -86,6 +85,10 @@ namespace erp_project.Controllers
                                 if (List_image.message != "Ok" || List_image.data.Count() != 1)
                                     return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
                                 Attributeimage.Add(List_image.data[0].fullPath);
+                            }
+                            else
+                            {
+                                Attributeimage.Add("No_Image");
                             }
                         }
                         return Ok(IProductAndService.addProductAndService(req, image, Attributeimage));
@@ -158,6 +161,10 @@ namespace erp_project.Controllers
                                 if (List_image.message != "Ok" || List_image.data.Count() != 1)
                                     return BadRequest("ไม่สามารถ บันทึกรูปภาพได้");
                                 Attributeimage.Add(List_image.data[0].fullPath);
+                            }
+                            else
+                            {
+                                Attributeimage.Add(null);
                             }
                         }
                         return Ok(IProductAndService.editProductAndSerivce(req, image, Attributeimage , ProductsId));
