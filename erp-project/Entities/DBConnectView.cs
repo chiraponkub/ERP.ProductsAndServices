@@ -10,6 +10,7 @@ namespace erp_project.Entities
     {
         public virtual DbSet<GetDataAddon> GetDataAddon { get; set; }
         public virtual DbSet<GetDataAddonDetails> GetDataAddonDetails { get; set; }
+        public virtual DbSet<GetDataAddonGroupPrice> GetDataAddonGroupPrice { get; set; }
         public virtual DbSet<GetProductAndServices> GetProductAndServices { get; set; }
     }
 }

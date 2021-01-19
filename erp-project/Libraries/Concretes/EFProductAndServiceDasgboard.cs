@@ -133,21 +133,24 @@ namespace erp_project.Libraries.Concretes
                 }
             }
 
-            string AddonPrice = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId}";
-            if (Above != null && Below != null)
+            
+            var checkDefault = db.GroupPrice.Where(w => w.SellingPriceDefault == true).FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
+            if (checkDefault != null)
             {
-                AddonPrice += $" AND AddonPrice BETWEEN {Below} AND {Above} ";
-            }
-            else if (Above != null && Below == null)
-            {
-                AddonPrice += $" AND AddonPrice >= {Above}";
-            }
-            else if (Above == null && Below != null)
-            {
-                AddonPrice += $" AND AddonPrice <= {Below}";
-            }
-
-            var retrue = db.GetDataAddon.FromSqlRaw($"Exec [productAndService].[AdvancedSearchAddOn] @Type,@ProductCode,@ProductName,@Attribute,@Description,@Unit,@AddonPrice",
+                string AddonPrice = $" AND AddonPrice IS NOT NULL AND DomainId = {domainId}";
+                if (Above != null && Below != null)
+                {
+                    AddonPrice += $" AND AddonPrice BETWEEN {Below} AND {Above} ";
+                }
+                else if (Above != null && Below == null)
+                {
+                    AddonPrice += $" AND AddonPrice >= {Above}";
+                }
+                else if (Above == null && Below != null)
+                {
+                    AddonPrice += $" AND AddonPrice <= {Below}";
+                }
+                var retrue = db.GetDataAddon.FromSqlRaw($"Exec [productAndService].[AdvancedSearchAddOn] @Type,@ProductCode,@ProductName,@Attribute,@Description,@Unit,@AddonPrice",
                 new SqlParameter("@Type", Type ?? (object)DBNull.Value),
                 new SqlParameter("@ProductCode", ProductCode ?? (object)DBNull.Value),
                 new SqlParameter("@ProductName", ProductName ?? (object)DBNull.Value),
@@ -157,12 +160,8 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@AddonPrice", AddonPrice ?? (object)DBNull.Value)
                 ).ToList();
 
-
-            var checkDefault = db.GroupPrice.Where(w => w.SellingPriceDefault == true).FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
-            if (checkDefault != null)
-            {
-                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId).ToList();
-                var show = (from a in retrue 
+                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
+                var show = (from a in retrue
                             select new m_priceSetting_GetDataPrice_response
                             {
                                 ProductAttributeId = a.AddonId,
@@ -179,9 +178,32 @@ namespace erp_project.Libraries.Concretes
             }
             else
             {
-                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId).ToList();
+                string AddonPrice = $" AND Price IS NOT NULL AND DomainId = {domainId}";
+                if (Above != null && Below != null)
+                {
+                    AddonPrice += $" AND Price BETWEEN {Below} AND {Above} ";
+                }
+                else if (Above != null && Below == null)
+                {
+                    AddonPrice += $" AND Price >= {Above}";
+                }
+                else if (Above == null && Below != null)
+                {
+                    AddonPrice += $" AND Price <= {Below}";
+                }
+                var retrue = db.GetDataAddonGroupPrice.FromSqlRaw($"Exec [productAndService].[AdvancedSearchAddOnGroupPrice] @Type,@ProductCode,@ProductName,@Attribute,@Description,@Unit,@AddonPrice",
+                new SqlParameter("@Type", Type ?? (object)DBNull.Value),
+                new SqlParameter("@ProductCode", ProductCode ?? (object)DBNull.Value),
+                new SqlParameter("@ProductName", ProductName ?? (object)DBNull.Value),
+                new SqlParameter("@Attribute", Attribute ?? (object)DBNull.Value),
+                new SqlParameter("@Description", Description ?? (object)DBNull.Value),
+                new SqlParameter("@Unit", Unit ?? (object)DBNull.Value),
+                new SqlParameter("@AddonPrice", AddonPrice ?? (object)DBNull.Value)
+                ).ToList();
+                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
                 var show = (from b in BindGroupPrice
                             join a in retrue on b.AddonId equals a.AddonId
+                            where a.GroupPriceId == GroupPriceId
                             select new m_priceSetting_GetDataPrice_response
                             {
                                 ProductAttributeId = b.AddonId,
@@ -193,7 +215,7 @@ namespace erp_project.Libraries.Concretes
                                 productUnti = a.UnitCode,
                                 productPrice = b.Price,
                                 CurrencyCode = groupPrice.CurrencyCode
-                            }).ToList();
+                            }).Distinct().ToList();
                 return show;
             }
         }

@@ -22,6 +22,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[productAndService].[GetDataAddonGroupPrice]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[productAndService].[GetProductAndServices]"
       }
    ],
