@@ -92,28 +92,30 @@ namespace erp_project.Libraries.Concretes
                         db.ProductAddons.Add(addOn);
                         db.SaveChanges();
                     }
-                    int count1 = 0;
-                    foreach (var mm1 in Images)
+                    if (Attributeimage != null)
                     {
-                        int count2 = 0;
-                        if (Attributeimage != null)
+                        for (int i = 0; i < req.addon.Count(); i++)
                         {
-                            foreach (var image in Attributeimage)
+                            var addon = req.addon[i];
+                            var img = Attributeimage[i];
+                            var addOn = new ProductAddons
                             {
-                                if (count1 == count2)
-                                {
-                                    var es = db.ProductAddons.FirstOrDefault(f => f.AddonId == mm1.AddonId);
-                                    es.AddonImage = image;
-                                    db.SaveChanges();
-                                    break;
-                                }
+                                ProductId = product.ProductId,
+                                AddonImage = null,
+                                AddonDescription = addon.valueDescription,
+                                AddonActive = true,
+                                AddonStatus = addon.status,
+                                AddonPrice = addon.price,
+                                ProductCode = addon.productCodeOnValue
+                            };
+                            db.ProductAddons.Add(addOn);
+                            if (img != null)
+                            {
+                                addOn.AddonImage = img;
                             }
-                            count2++;
+                            db.SaveChanges();
                         }
-                        count1++;
                     }
-
-                    Transaction.Commit();
 
                     var tbl_attributes = db.ProductAttributes.Where(w => w.ProductId == product.ProductId).ToList();
                     var tbl_Addon = db.ProductAddons.Where(w => w.ProductId == product.ProductId).ToList();
@@ -185,7 +187,9 @@ namespace erp_project.Libraries.Concretes
                             db.SaveChanges();
                         }
                     }
-                    return product.ProductId;
+
+                        Transaction.Commit();
+                        return product.ProductId;
                 }
                 catch (Exception ex)
                 {
@@ -216,27 +220,27 @@ namespace erp_project.Libraries.Concretes
                     db.SaveChanges();
                     if (req.attribute == null || req.addon == null)
                     {
-                        var att = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId).ToList();
+                        var att = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId && w.AttributeActive == true).ToList();
                         if (att != null)
                         {
                             foreach (var m1 in att)
                             {
-                                m1.AttributeActive = false;
+                                m1.AttributeActive = false; 
                                 db.SaveChanges();
 
-                                var val = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId).ToList();
+                                var val = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId && w.ValueActive == true).ToList();
                                 foreach (var m2 in val)
                                 {
-                                    m2.ValueActive = false;
+                                    m2.ValueActive = false; 
                                     db.SaveChanges();
                                 }
 
-                                var addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId).ToList();
+                                var addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId && w.AddonActive == true).ToList();
                                 foreach (var m3 in addon)
                                 {
                                     m3.AddonActive = false;
-                                    db.SaveChanges();
                                 }
+                                db.SaveChanges();
                             }
                         }
                         Transaction.Commit();
@@ -244,7 +248,7 @@ namespace erp_project.Libraries.Concretes
                     }
                     else
                     {
-                        var att = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId).ToList();
+                        var att = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId && w.AttributeActive == true).ToList();
                         if (att != null)
                         {
                             foreach (var m1 in att)
@@ -252,14 +256,14 @@ namespace erp_project.Libraries.Concretes
                                 m1.AttributeActive = false;
                                 db.SaveChanges();
 
-                                var val = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId).ToList();
+                                var val = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId && w.ValueActive == true).ToList();
                                 foreach (var m2 in val)
                                 {
                                     m2.ValueActive = false;
                                     db.SaveChanges();
                                 }
 
-                                var addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId).ToList();
+                                var addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId && w.AddonActive == true).ToList();
                                 foreach (var m3 in addon)
                                 {
                                     m3.AddonActive = false;
@@ -292,30 +296,30 @@ namespace erp_project.Libraries.Concretes
                             }
                         }
 
-                        for (int i = 0; i < req.addon.Count(); i++)
+                        if (Attributeimage != null)
                         {
-                            var addon = req.addon[i];
-                            var img = Attributeimage[i];
-                            var addOn = new ProductAddons
+                            for (int i = 0; i < req.addon.Count(); i++)
                             {
-                                ProductId = Find.ProductId,
-                                AddonImage = null,
-                                AddonDescription = addon.valueDescription,
-                                AddonActive = true,
-                                AddonStatus = addon.status,
-                                AddonPrice = addon.price,
-                                ProductCode = addon.productCodeOnValue
-                            };
-                            db.ProductAddons.Add(addOn);
-                            if (img != null)
-                            {
-                                addOn.AddonImage = img;
+                                var addon = req.addon[i];
+                                var img = Attributeimage[i];
+                                var addOn = new ProductAddons
+                                {
+                                    ProductId = Find.ProductId,
+                                    AddonImage = null,
+                                    AddonDescription = addon.valueDescription,
+                                    AddonActive = true,
+                                    AddonStatus = addon.status,
+                                    AddonPrice = addon.price,
+                                    ProductCode = addon.productCodeOnValue
+                                };
+                                db.ProductAddons.Add(addOn);
+                                if (img != null)
+                                {
+                                    addOn.AddonImage = img;
+                                }
+                                db.SaveChanges();
                             }
-                            db.SaveChanges();
                         }
-
-                        Transaction.Commit();
-
                         var tbl_attributes = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId && w.AttributeActive == true).ToList();
                         var tbl_Addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId && w.AddonActive == true).ToList();
                         var tbl_values = db.ProductAttributeValues.Where(w => w.ValueActive == true && tbl_attributes.Select(s => s.AttributeId).Contains(w.AttributeId)).ToList();
@@ -387,6 +391,7 @@ namespace erp_project.Libraries.Concretes
                             }
                         }
                     }
+                    Transaction.Commit();
                     return true;
                 }
                 catch (Exception ex)
