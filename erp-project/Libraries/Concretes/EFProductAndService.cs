@@ -535,12 +535,12 @@ namespace erp_project.Libraries.Concretes
         }
         public bool unit(m_unit_request res)
         {
-            var check = db.ProductUnit.Where(f => f.DomainId == res.domainID).ToList();
+            var check = db.ProductUnit.Where(f => f.DomainId == res.domainID && f.Active == true).ToList();
             if (check != null)
             {
                 foreach (var m1 in check)
                 {
-                    if (m1.UnitCode == res.unitName)
+                    if (m1.UnitCode == res.unitName && m1.Active == true)
                     {
                         throw new Exception("ชื่อซ้ำ");
                     }
@@ -557,7 +557,7 @@ namespace erp_project.Libraries.Concretes
         }
         public bool editunit(int untiId, m_unit_edit_request res)
         {
-            var Find = db.ProductUnit.FirstOrDefault(f => f.ProductUnitId == untiId);
+            var Find = db.ProductUnit.FirstOrDefault(f => f.ProductUnitId == untiId && f.Active == true);
             if (Find == null)
                 return false;
             if (Find.UnitCode == res.unitName && Find.Active == true)
