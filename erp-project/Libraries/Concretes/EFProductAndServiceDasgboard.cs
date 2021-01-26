@@ -62,6 +62,7 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@domainId", domainId ?? (object)DBNull.Value),
                 new SqlParameter("@ProductPrice", Price ?? (object)DBNull.Value)
                 ).ToList();
+            
 
             foreach (var m1 in retrue)
             {
@@ -115,7 +116,6 @@ namespace erp_project.Libraries.Concretes
                             Active = true
                         };
                         db.BindGroupPrice.Add(save);
-                        db.SaveChanges();
                     }
                     else
                     {
@@ -128,12 +128,12 @@ namespace erp_project.Libraries.Concretes
                             Active = true
                         };
                         db.BindGroupPrice.Add(save);
-                        db.SaveChanges();
+                        
                     }
                 }
             }
+            db.SaveChanges(); 
 
-            
             var checkDefault = db.GroupPrice.Where(w => w.SellingPriceDefault == true).FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
             if (checkDefault != null)
             {
@@ -250,6 +250,7 @@ namespace erp_project.Libraries.Concretes
                                           where val.AttributeId == patt.AttributeId && val.ValueActive == true
                                           select new m_Edit_productandservice_AttributeValue_request
                                           {
+                                              
                                               valueName = val.ValueName
                                           }).ToList()
                              }).ToList();
@@ -263,11 +264,13 @@ namespace erp_project.Libraries.Concretes
                 });
             }
 
-            var getdataAddon = db.GetDataAddon.Where(w => w.ProductId == ProductId).ToList();
+            var getdataAddon = db.GetDataAddon.Where(w => w.ProductId == ProductId).OrderByDescending(o => o.AddonId).ToList();
             foreach (var m1 in getdataAddon)
             {
                 List<m_Edit_productandservice_AddonDetails_request> AddonDetails = new List<m_Edit_productandservice_AddonDetails_request>();
-                var getdataaddonDetails = db.GetDataAddonDetails.Where(w => w.AddonId == m1.AddonId && w.ValueActive == true && w.AttributeActive == true).ToList();
+                var getdataaddonDetails = db.GetDataAddonDetails.Where(w => w.AddonId == m1.AddonId && w.ValueActive == true && w.AttributeActive == true)
+                    .OrderByDescending(o => o.AddonId)
+                    .ToList();
                 foreach (var m2 in getdataaddonDetails)
                 {
                     AddonDetails.Add(new m_Edit_productandservice_AddonDetails_request
