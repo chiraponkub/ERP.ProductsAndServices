@@ -44,6 +44,14 @@ namespace erp_project.Controllers
         {
             try
             {
+                var nameproduct = db.Products.Where(w => w.DomainId == req.domainId).ToList();
+                foreach (var m1 in nameproduct)
+                {
+                    if (m1.ProductName == req.productName && m1.ProductActive == true)
+                    {
+                        return BadRequest("Duplicate product name");
+                    }
+                }
                 string image;
                 ERPHttpResponse<List<m_uploadimage>> p_image = new ERPHttpResponse<List<m_uploadimage>>();
                 ERPHttpResponse<List<m_uploadimage>> List_image = new ERPHttpResponse<List<m_uploadimage>>();
@@ -341,6 +349,7 @@ namespace erp_project.Controllers
         /// แก้ไขราคาสินค้า
         /// </summary>
         /// <param name="req"></param>
+        /// <param name="GroupPriceId"></param>
         /// <returns></returns>
         [Authorize]
         [HttpPut("EditaddonPrice{GroupPriceId}")]

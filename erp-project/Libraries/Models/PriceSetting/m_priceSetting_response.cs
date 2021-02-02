@@ -22,7 +22,7 @@ namespace erp_project.Libraries.Models.PriceSetting
 
     public class m_priceSetting_GetDataPrice_response
     {
-        public int ProductAttributeId { get; set; }
+        public int? ProductAttributeId { get; set; }
         public string productType { get; set; }
         public string productCode { get; set; }
         public string productName { get; set; }

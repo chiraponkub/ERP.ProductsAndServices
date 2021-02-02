@@ -62,7 +62,6 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@domainId", domainId ?? (object)DBNull.Value),
                 new SqlParameter("@ProductPrice", Price ?? (object)DBNull.Value)
                 ).ToList();
-            
 
             foreach (var m1 in retrue)
             {
@@ -99,6 +98,28 @@ namespace erp_project.Libraries.Concretes
             var groupPrice = db.GroupPrice.FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
             var DataAddon = db.GetDataAddon.Where(w => w.DomainId == domainId).ToList();
 
+
+            //foreach (var m1 in DataAddon)
+            //{
+            //    if (CheckPrice != null)
+            //    {
+            //        var insert = Tbl_GroupPrice.FromSqlRaw($"Exec [productAndService].[InsertDataGroupPriceOnDefault] @domainId,@AddonId,@groupPriceID,@Price",
+            //        new SqlParameter("@domainId", domainId),
+            //        new SqlParameter("@AddonId",m1.AddonId),
+            //        new SqlParameter("@groupPriceID", GroupPriceId),
+            //        new SqlParameter("@Price", m1.AddonPrice)
+            //        ).ToList();
+            //    }
+            //    else
+            //    {
+            //        var insert = Tbl_GroupPrice.FromSqlRaw($"Exec [productAndService].[InsertDataGroupPriceIsNotDefault] @domainId,@AddonId,@groupPriceID",
+            //        new SqlParameter("@domainId", domainId),
+            //        new SqlParameter("@AddonId", m1.AddonId),
+            //        new SqlParameter("@groupPriceID", GroupPriceId)
+            //        ).ToList();
+            //    }
+            //}
+
             foreach (var m1 in DataAddon)
             {
                 var check = db.BindGroupPrice.Where(w => w.AddonId == m1.AddonId && w.GroupPriceId == GroupPriceId && w.Active == true && w.DomainId == domainId).FirstOrDefault();
@@ -128,11 +149,11 @@ namespace erp_project.Libraries.Concretes
                             Active = true
                         };
                         db.BindGroupPrice.Add(save);
-                        
+
                     }
                 }
             }
-            db.SaveChanges(); 
+            db.SaveChanges();
 
             var checkDefault = db.GroupPrice.Where(w => w.SellingPriceDefault == true).FirstOrDefault(f => f.GroupPriceId == GroupPriceId);
             if (checkDefault != null)
@@ -160,21 +181,38 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@AddonPrice", AddonPrice ?? (object)DBNull.Value)
                 ).ToList();
 
-                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
-                var show = (from a in retrue
-                            select new m_priceSetting_GetDataPrice_response
-                            {
-                                ProductAttributeId = a.AddonId,
-                                productType = a.ProductTypeName,
-                                productCode = a.ProductCode,
-                                productName = a.ProductName,
-                                attribute = a.Attribute,
-                                productDescription = a.AddonDescription,
-                                productUnti = a.UnitCode,
-                                productPrice = a.AddonPrice,
-                                CurrencyCode = groupPrice.CurrencyCode
-                            }).ToList();
-                return show;
+                //var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
+                List<m_priceSetting_GetDataPrice_response> models = new List<m_priceSetting_GetDataPrice_response>();
+                foreach (var m1 in retrue)
+                {
+                    var ss = m1.Attribute.Split(m1.ProductCode + "-");
+                    models.Add(new m_priceSetting_GetDataPrice_response
+                    {
+                        ProductAttributeId = m1.AddonId,
+                        productType = m1.ProductTypeName,
+                        productCode = m1.Attribute,
+                        productName = m1.ProductName,
+                        attribute = ss[1],
+                        productDescription = m1.AddonDescription,
+                        productUnti = m1.UnitCode,
+                        productPrice = m1.AddonPrice,
+                        CurrencyCode = groupPrice.CurrencyCode
+                    });
+                }
+                //var show = (from a in retrue
+                //            select new m_priceSetting_GetDataPrice_response
+                //            {
+                //                ProductAttributeId = a.AddonId,
+                //                productType = a.ProductTypeName,
+                //                productCode = a.Attribute,
+                //                productName = a.ProductName,
+                //                attribute = a.Attribute,
+                //                productDescription = a.AddonDescription,
+                //                productUnti = a.UnitCode,
+                //                productPrice = a.AddonPrice,
+                //                CurrencyCode = groupPrice.CurrencyCode
+                //            }).ToList();
+                return models;
             }
             else
             {
@@ -199,24 +237,43 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@Description", Description ?? (object)DBNull.Value),
                 new SqlParameter("@Unit", Unit ?? (object)DBNull.Value),
                 new SqlParameter("@AddonPrice", AddonPrice ?? (object)DBNull.Value)
-                ).ToList();
-                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
-                var show = (from b in BindGroupPrice
-                            join a in retrue on b.AddonId equals a.AddonId
-                            where a.GroupPriceId == GroupPriceId
-                            select new m_priceSetting_GetDataPrice_response
-                            {
-                                ProductAttributeId = b.AddonId,
-                                productType = a.ProductTypeName,
-                                productCode = a.ProductCode,
-                                productName = a.ProductName,
-                                attribute = a.Attribute,
-                                productDescription = a.AddonDescription,
-                                productUnti = a.UnitCode,
-                                productPrice = b.Price,
-                                CurrencyCode = groupPrice.CurrencyCode
-                            }).Distinct().ToList();
-                return show;
+                ).ToList().Where(w => w.GroupPriceId == GroupPriceId).ToList();
+
+                List<m_priceSetting_GetDataPrice_response> models = new List<m_priceSetting_GetDataPrice_response>();
+                foreach (var m1 in retrue)
+                {
+                    var ss = m1.Attribute.Split(m1.ProductCode + "-");
+                    models.Add(new m_priceSetting_GetDataPrice_response
+                    {
+                        ProductAttributeId = m1.AddonId,
+                        productType = m1.ProductTypeName,
+                        productCode = m1.Attribute,
+                        productName = m1.ProductName,
+                        attribute = ss[1],
+                        productDescription = m1.AddonDescription,
+                        productUnti = m1.UnitCode,
+                        productPrice = m1.Price,
+                        CurrencyCode = groupPrice.CurrencyCode
+                    });
+                }
+
+                //var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
+                //var show = (from b in BindGroupPrice
+                //            join a in retrue on b.AddonId equals a.AddonId
+                //            where a.GroupPriceId == GroupPriceId
+                //            select new m_priceSetting_GetDataPrice_response
+                //            {
+                //                ProductAttributeId = b.AddonId,
+                //                productType = a.ProductTypeName,
+                //                productCode = a.ProductCode,
+                //                productName = a.ProductName,
+                //                attribute = a.Attribute,
+                //                productDescription = a.AddonDescription,
+                //                productUnti = a.UnitCode,
+                //                productPrice = b.Price,
+                //                CurrencyCode = groupPrice.CurrencyCode
+                //            }).Distinct().ToList();
+                return models;
             }
         }
 
@@ -250,7 +307,7 @@ namespace erp_project.Libraries.Concretes
                                           where val.AttributeId == patt.AttributeId && val.ValueActive == true
                                           select new m_Edit_productandservice_AttributeValue_request
                                           {
-                                              
+
                                               valueName = val.ValueName
                                           }).ToList()
                              }).ToList();

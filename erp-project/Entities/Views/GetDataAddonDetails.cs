@@ -18,6 +18,7 @@ namespace erp_project.Entities.Views
         public string AddonDescription { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal? AddonPrice { get; set; }
+        public decimal? Price { get; set; }
         public bool? AddonStatus { get; set; }
         public bool? AddonActive { get; set; }
         [StringLength(100)]

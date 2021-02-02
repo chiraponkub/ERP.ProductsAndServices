@@ -26,8 +26,8 @@ namespace erp_project.Libraries.Concretes
             using (var Transaction = db.Database.BeginTransaction())
             {
 
-                bool isShowCode = true;
-                int orderByIndex = 0;
+                //bool isShowCode = true;
+                //int orderByIndex = 0;
                 try
                 {
                     var product = new Products
