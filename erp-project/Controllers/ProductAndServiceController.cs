@@ -47,7 +47,7 @@ namespace erp_project.Controllers
                 var nameproduct = db.Products.Where(w => w.DomainId == req.domainId).ToList();
                 foreach (var m1 in nameproduct)
                 {
-                    if (m1.ProductName == req.productName && m1.ProductActive == true)
+                    if (m1.ProductName.Trim() == req.productName.Trim() && m1.ProductActive == true)
                     {
                         return BadRequest("Duplicate product name");
                     }
