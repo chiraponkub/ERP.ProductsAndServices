@@ -399,20 +399,29 @@ namespace erp_project.Libraries.Concretes
                     var delproduct = db.Products.FirstOrDefault(f => f.ProductId == ProductID);
                     var delattributes = db.ProductAttributes.Where(w => w.ProductId == ProductID).ToList();
                     delproduct.ProductActive = false;
-                    foreach (var m1 in delattributes)
+                    if (delattributes != null)
                     {
-                        m1.AttributeActive = false;
-                        var delvalues = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId).ToList();
-                        foreach (var m2 in delvalues)
+                        foreach (var m1 in delattributes)
                         {
-                            m2.ValueActive = false;
+                            m1.AttributeActive = false;
+                            var delvalues = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId).ToList();
+                            if (delvalues != null)
+                            {
+                                foreach (var m2 in delvalues)
+                                {
+                                    m2.ValueActive = false;
+                                }
+                            }
+                            var deladdon = db.ProductAddons.Where(w => w.ProductId == m1.ProductId).ToList();
+                            if (deladdon != null)
+                            {
+                                foreach (var m3 in deladdon)
+                                {
+                                    m3.AddonActive = false;
+                                }
+                            }
+                            db.SaveChanges();
                         }
-                        var deladdon = db.ProductAddons.Where(w => w.ProductId == m1.ProductId).ToList();
-                        foreach (var m3 in deladdon)
-                        {
-                            m3.AddonActive = false;
-                        }
-                        db.SaveChanges();
                     }
                     Transaction.Commit();
                     return true;
