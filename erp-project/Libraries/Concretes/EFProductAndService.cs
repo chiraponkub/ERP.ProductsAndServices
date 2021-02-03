@@ -420,9 +420,9 @@ namespace erp_project.Libraries.Concretes
                                     m3.AddonActive = false;
                                 }
                             }
-                            db.SaveChanges();
                         }
                     }
+                    db.SaveChanges();
                     Transaction.Commit();
                     return true;
                 }
