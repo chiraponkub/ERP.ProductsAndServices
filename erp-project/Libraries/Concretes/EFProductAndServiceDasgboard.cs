@@ -181,37 +181,37 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@AddonPrice", AddonPrice ?? (object)DBNull.Value)
                 ).ToList();
 
-                //var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
-                List<m_priceSetting_GetDataPrice_response> models = new List<m_priceSetting_GetDataPrice_response>();
-                foreach (var m1 in retrue)
-                {
-                    var ss = m1.Attribute.Split(m1.ProductCode + "-");
-                    models.Add(new m_priceSetting_GetDataPrice_response
-                    {
-                        ProductAttributeId = m1.AddonId,
-                        productType = m1.ProductTypeName,
-                        productCode = m1.Attribute,
-                        productName = m1.ProductName,
-                        attribute = ss[1],
-                        productDescription = m1.AddonDescription,
-                        productUnti = m1.UnitCode,
-                        productPrice = m1.AddonPrice,
-                        CurrencyCode = groupPrice.CurrencyCode
-                    });
-                }
-                //var show = (from a in retrue
-                //            select new m_priceSetting_GetDataPrice_response
-                //            {
-                //                ProductAttributeId = a.AddonId,
-                //                productType = a.ProductTypeName,
-                //                productCode = a.Attribute,
-                //                productName = a.ProductName,
-                //                attribute = a.Attribute,
-                //                productDescription = a.AddonDescription,
-                //                productUnti = a.UnitCode,
-                //                productPrice = a.AddonPrice,
-                //                CurrencyCode = groupPrice.CurrencyCode
-                //            }).ToList();
+                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
+                //List<m_priceSetting_GetDataPrice_response> models = new List<m_priceSetting_GetDataPrice_response>();
+                //foreach (var m1 in retrue)
+                //{
+                //    var ss = m1.Attribute.Split(m1.ProductCode + "-");
+                //    models.Add(new m_priceSetting_GetDataPrice_response
+                //    {
+                //        ProductAttributeId = m1.AddonId,
+                //        productType = m1.ProductTypeName,
+                //        productCode = m1.Attribute,
+                //        productName = m1.ProductName,
+                //        attribute = ss[1],
+                //        productDescription = m1.AddonDescription,
+                //        productUnti = m1.UnitCode,
+                //        productPrice = m1.AddonPrice,
+                //        CurrencyCode = groupPrice.CurrencyCode
+                //    });
+                //}
+                var models = (from a in retrue
+                              select new m_priceSetting_GetDataPrice_response
+                              {
+                                  ProductAttributeId = a.AddonId,
+                                  productType = a.ProductTypeName,
+                                  productCode = a.ProductCode,
+                                  productName = a.ProductName,
+                                  attribute = a.Attribute,
+                                  productDescription = a.AddonDescription,
+                                  productUnti = a.UnitCode,
+                                  productPrice = a.AddonPrice,
+                                  CurrencyCode = groupPrice.CurrencyCode
+                              }).ToList();
                 return models;
             }
             else
@@ -239,40 +239,40 @@ namespace erp_project.Libraries.Concretes
                 new SqlParameter("@AddonPrice", AddonPrice ?? (object)DBNull.Value)
                 ).ToList().Where(w => w.GroupPriceId == GroupPriceId).ToList();
 
-                List<m_priceSetting_GetDataPrice_response> models = new List<m_priceSetting_GetDataPrice_response>();
-                foreach (var m1 in retrue)
-                {
-                    var ss = m1.Attribute.Split(m1.ProductCode + "-");
-                    models.Add(new m_priceSetting_GetDataPrice_response
-                    {
-                        ProductAttributeId = m1.AddonId,
-                        productType = m1.ProductTypeName,
-                        productCode = m1.Attribute,
-                        productName = m1.ProductName,
-                        attribute = ss[1],
-                        productDescription = m1.AddonDescription,
-                        productUnti = m1.UnitCode,
-                        productPrice = m1.Price,
-                        CurrencyCode = groupPrice.CurrencyCode
-                    });
-                }
+                //List<m_priceSetting_GetDataPrice_response> models = new List<m_priceSetting_GetDataPrice_response>();
+                //foreach (var m1 in retrue)
+                //{
+                //    var ss = m1.Attribute.Split(m1.ProductCode + "-");
+                //    models.Add(new m_priceSetting_GetDataPrice_response
+                //    {
+                //        ProductAttributeId = m1.AddonId,
+                //        productType = m1.ProductTypeName,
+                //        productCode = m1.Attribute,
+                //        productName = m1.ProductName,
+                //        attribute = string.IsNullOrEmpty(ss[1]) ? "-" : ss[1],
+                //        productDescription = string.IsNullOrEmpty(m1.AddonDescription) ? null : m1.AddonDescription,
+                //        productUnti = m1.UnitCode,
+                //        productPrice = m1.Price,
+                //        CurrencyCode = groupPrice.CurrencyCode
+                //    });
+                //}
 
-                //var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
-                //var show = (from b in BindGroupPrice
-                //            join a in retrue on b.AddonId equals a.AddonId
-                //            where a.GroupPriceId == GroupPriceId
-                //            select new m_priceSetting_GetDataPrice_response
-                //            {
-                //                ProductAttributeId = b.AddonId,
-                //                productType = a.ProductTypeName,
-                //                productCode = a.ProductCode,
-                //                productName = a.ProductName,
-                //                attribute = a.Attribute,
-                //                productDescription = a.AddonDescription,
-                //                productUnti = a.UnitCode,
-                //                productPrice = b.Price,
-                //                CurrencyCode = groupPrice.CurrencyCode
-                //            }).Distinct().ToList();
+                var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
+                var models = (from b in BindGroupPrice
+                            join a in retrue on b.AddonId equals a.AddonId
+                            where a.GroupPriceId == GroupPriceId
+                            select new m_priceSetting_GetDataPrice_response
+                            {
+                                ProductAttributeId = b.AddonId,
+                                productType = a.ProductTypeName,
+                                productCode = a.ProductCode,
+                                productName = a.ProductName,
+                                attribute = a.Attribute,
+                                productDescription = a.AddonDescription,
+                                productUnti = a.UnitCode,
+                                productPrice = b.Price,
+                                CurrencyCode = groupPrice.CurrencyCode
+                            }).Distinct().ToList();
                 return models;
             }
         }

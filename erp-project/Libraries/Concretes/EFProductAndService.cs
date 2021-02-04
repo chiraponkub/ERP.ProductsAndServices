@@ -32,7 +32,7 @@ namespace erp_project.Libraries.Concretes
                 {
                     var product = new Products
                     {
-                        ProductCode = req.productCode,
+                        ProductCode = string.IsNullOrEmpty(req.productCode) ? null : req.productCode,
                         ProductName = req.productName,
                         ProductTypeId = req.productTypeId,
                         ProductDescription = req.productDescription,
@@ -201,14 +201,14 @@ namespace erp_project.Libraries.Concretes
             {
                 try
                 {
-                    var Find = db.Products.FirstOrDefault(f => f.ProductId == ProductsId);
+                    var Find = db.Products.FirstOrDefault(f => f.ProductId == ProductsId && f.ProductActive == true);
                     if (Find == null)
                     {
                         throw new Exception("ProductId Not Found");
                     }
                     Find.ProductName = req.productName;
                     Find.ProductTypeId = req.productTypeId;
-                    Find.ProductCode = req.productCode;
+                    Find.ProductCode = string.IsNullOrEmpty(req.productCode) ? null : req.productCode;
                     Find.ProductImage = string.IsNullOrEmpty(productimage) ? Find.ProductImage : productimage;
                     Find.ProductStatusId = req.productStatusId;
                     Find.ProductUntiId = req.productUntiId;
@@ -218,7 +218,7 @@ namespace erp_project.Libraries.Concretes
                     if (req.attribute == null || req.addon == null)
                     {
                         var att = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId && w.AttributeActive == true).ToList();
-                        if (att != null)
+                        if (att.Count() > 0)
                         {
                             foreach (var m1 in att)
                             {
@@ -244,24 +244,26 @@ namespace erp_project.Libraries.Concretes
                     else
                     {
                         var att = db.ProductAttributes.Where(w => w.ProductId == Find.ProductId && w.AttributeActive == true).ToList();
-                        if (att != null)
-                        {
                             foreach (var m1 in att)
                             {
                                 m1.AttributeActive = false;
 
                                 var val = db.ProductAttributeValues.Where(w => w.AttributeId == m1.AttributeId && w.ValueActive == true).ToList();
-                                foreach (var m2 in val)
+                                if (val != null)
                                 {
-                                    m2.ValueActive = false;
+                                    foreach (var m2 in val)
+                                    {
+                                        m2.ValueActive = false;
+                                    }
                                 }
 
                                 var addon = db.ProductAddons.Where(w => w.ProductId == Find.ProductId && w.AddonActive == true).ToList();
+                                if(addon != null)
                                 foreach (var m3 in addon)
                                 {
                                     m3.AddonActive = false;
                                 }
-                            }
+                            
                         }
                         db.SaveChanges();
 
@@ -351,11 +353,15 @@ namespace erp_project.Libraries.Concretes
                                 }
                             }
 
+                            if (Find.ProductCode == null)
+                            {
+                                Find.ProductCode = "-";
+                            }
 
                             var tbl_newAddon = tbl_Addon.Select(s => new
                             {
                                 AddonId = s.AddonId,
-                                ProductCodeList = string.Join("", s.ProductCode.Split(Find.ProductCode + "-").Where(w => w != Find.ProductCode).ToList())
+                                ProductCodeList = string.Join("", s.ProductCode.Split(Find.ProductCode + "-").Where(w => w !=  Find.ProductCode).ToList())
                             }).ToList();
 
                             int? tbl_AddonID = tbl_newAddon
