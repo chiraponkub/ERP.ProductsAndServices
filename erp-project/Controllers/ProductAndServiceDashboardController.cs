@@ -126,7 +126,7 @@ namespace erp_project.Controllers
                     db.GroupPrice.Add(save);
                     db.SaveChanges();
                 }
-                return Ok(IProductAndServiceDasgboard.getprice(domainId, Token));
+                return Ok(IProductAndServiceDasgboard.getprice(domainId, Token, host));
             }
             catch (Exception ex)
             {

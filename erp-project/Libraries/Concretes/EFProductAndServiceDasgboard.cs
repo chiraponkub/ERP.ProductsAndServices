@@ -265,20 +265,20 @@ namespace erp_project.Libraries.Concretes
 
                 var BindGroupPrice = db.BindGroupPrice.Where(w => w.GroupPriceId == GroupPriceId && w.Active == true).ToList();
                 var models = (from b in BindGroupPrice
-                            join a in retrue on b.AddonId equals a.AddonId
-                            where a.GroupPriceId == GroupPriceId
-                            select new m_priceSetting_GetDataPrice_response
-                            {
-                                ProductAttributeId = b.AddonId,
-                                productType = a.ProductTypeName,
-                                productCode = a.ProductCode,
-                                productName = a.ProductName,
-                                attribute = a.Attribute,
-                                productDescription = a.AddonDescription,
-                                productUnti = a.UnitCode,
-                                productPrice = b.Price,
-                                CurrencyCode = groupPrice.CurrencyCode
-                            }).Distinct().ToList();
+                              join a in retrue on b.AddonId equals a.AddonId
+                              where a.GroupPriceId == GroupPriceId
+                              select new m_priceSetting_GetDataPrice_response
+                              {
+                                  ProductAttributeId = b.AddonId,
+                                  productType = a.ProductTypeName,
+                                  productCode = a.ProductCode,
+                                  productName = a.ProductName,
+                                  attribute = a.Attribute,
+                                  productDescription = a.AddonDescription,
+                                  productUnti = a.UnitCode,
+                                  productPrice = b.Price,
+                                  CurrencyCode = groupPrice.CurrencyCode
+                              }).Distinct().ToList();
                 return models;
             }
         }
@@ -354,17 +354,17 @@ namespace erp_project.Libraries.Concretes
             }
             return models;
         }
-        public List<m_priceSetting_response> getprice(int domainId,string Token)
+        public List<m_priceSetting_response> getprice(int domainId, string Token ,string host)
         {
 
+            //string host = _IConfiguration.GetValue<string>("BE_HOST");
+            var httpservice = new HttpApiService();
+            httpservice.Authorization(Token);
             var res = db.GroupPrice.Where(w => w.DomainId == domainId && w.Active == true).ToList();
             List<m_priceSetting_response> models = new List<m_priceSetting_response>();
             foreach (var m1 in res)
             {
-                string hostBase = _IConfiguration.GetValue<string>("BE_HOST");
-                var httpservice = new HttpApiService();
-                httpservice.Authorization(Token);
-                var currencyId = httpservice.Get<ERPHttpResponse<PrimaryCurrency>>($"{hostBase}/rest-master/api/Master/CurrencyByID?code={m1.CurrencyCode}").Result.Content.data;
+                var currencyId = httpservice.Get<ERPHttpResponse<PrimaryCurrency>>($"{host}/rest-master/api/Master/CurrencyByID?code={m1.CurrencyCode}").Result.Content.data;
                 models.Add(new m_priceSetting_response
                 {
                     groupPriceID = m1.GroupPriceId,
