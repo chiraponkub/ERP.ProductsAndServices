@@ -112,21 +112,21 @@ namespace erp_project.Controllers
                 var Find = db.GroupPrice.Where(w => w.SellingPriceDefault == true && w.DomainId == domainId && w.Active == true).FirstOrDefault();
 
                 var PrimaryCurrency = HttpService.Get<ERPHttpResponse<List<PrimaryCurrency>>>($"{host}/rest-master/api/Master/currency").Result.Content;
-                PrimaryCurrency documentLanguage = PrimaryCurrency.data.Where(w => w.PrimaryCurrencyId == getdomain.data.primaryCurrencyId).FirstOrDefault();
+                PrimaryCurrency PrimaryCurrencycode = PrimaryCurrency.data.Where(w => w.PrimaryCurrencyId == getdomain.data.primaryCurrencyId).FirstOrDefault();
                 if (Find == null)
                 {
                     var save = new GroupPrice
                     {
                         PriceName = "Standard",
                         CurrencyId = getdomain.data.primaryCurrencyId,
-                        CurrencyCode = documentLanguage.PrimaryCurrencycode,
+                        CurrencyCode = PrimaryCurrencycode.PrimaryCurrencycode,
                         DomainId = domainId,
                         SellingPriceDefault = true
                     };
                     db.GroupPrice.Add(save);
                     db.SaveChanges();
                 }
-                return Ok(IProductAndServiceDasgboard.getprice(domainId));
+                return Ok(IProductAndServiceDasgboard.getprice(domainId, Token));
             }
             catch (Exception ex)
             {

@@ -11,7 +11,9 @@ namespace erp_project.Libraries.Models.PriceSetting
         public int groupPriceID { get; set; }
         public string priceName { get; set; }
         public string currencyCode { get; set; }
+        public int currencyId { get; set; }
         public bool sellingPriceDefault { get; set; }
+
     }
 
     public class m_priceSetting_response_edit

@@ -11,16 +11,22 @@ using Microsoft.EntityFrameworkCore;
 using erp_project.Libraries.Models.PriceSetting;
 using erp_project.Entities.Tables;
 using Microsoft.Data.SqlClient;
+using erp_project.Library.Concretes;
+using Microsoft.Extensions.Configuration;
+using erp_project.Services.Models;
 
 namespace erp_project.Libraries.Concretes
 {
     public class EFProductAndServiceDasgboard : IProductAndServiceDasgboard
     {
         private readonly DBConnect db;
+        private readonly IConfiguration _IConfiguration;
+
 
         public EFProductAndServiceDasgboard(DBConnect db)
         {
             this.db = db;
+            this._IConfiguration = _IConfiguration;
         }
 
         public List<m_productandservice_response> GetProdtuct(
@@ -348,19 +354,24 @@ namespace erp_project.Libraries.Concretes
             }
             return models;
         }
-        public List<m_priceSetting_response> getprice(int domainId)
+        public List<m_priceSetting_response> getprice(int domainId,string Token)
         {
 
             var res = db.GroupPrice.Where(w => w.DomainId == domainId && w.Active == true).ToList();
             List<m_priceSetting_response> models = new List<m_priceSetting_response>();
             foreach (var m1 in res)
             {
+                string hostBase = _IConfiguration.GetValue<string>("BE_HOST");
+                var httpservice = new HttpApiService();
+                httpservice.Authorization(Token);
+                var currencyId = httpservice.Get<ERPHttpResponse<PrimaryCurrency>>($"{hostBase}/rest-master/api/Master/CurrencyByID?code={m1.CurrencyCode}").Result.Content.data;
                 models.Add(new m_priceSetting_response
                 {
                     groupPriceID = m1.GroupPriceId,
                     priceName = m1.PriceName,
                     currencyCode = m1.CurrencyCode,
-                    sellingPriceDefault = m1.SellingPriceDefault
+                    sellingPriceDefault = m1.SellingPriceDefault,
+                    currencyId = currencyId.PrimaryCurrencyId
                 });
             }
             return models;
