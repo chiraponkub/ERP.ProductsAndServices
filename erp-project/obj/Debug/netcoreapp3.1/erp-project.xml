@@ -1,0 +1,683 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>erp-project</name>
+    </assembly>
+    <members>
+        <member name="T:erp_project.Configs.AuthenticationConfig">
+            <summary>
+            ส่วนของการตั้งค่า ยืนยันตัวตน Authorization
+            </summary>
+        </member>
+        <member name="M:erp_project.Configs.AuthenticationConfig.AddAuthenticationHelper(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ส่วนของการตั้งค่า ยืนยันตัวตน
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:erp_project.Configs.ExceptionConfig">
+            <summary>
+            สำหรับทำส่วนดักจับ Error Message ที่เข้าถึงแบบ Dynamic
+            </summary>
+        </member>
+        <member name="M:erp_project.Configs.ExceptionConfig.ErrorMessage(System.Exception)">
+            <summary>
+            ดึงข้อมูล Error ที่อยู่ในสุดของ Exception ออกมา
+            </summary>
+            <param name="exception"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Configs.ExceptionConfig.AddException(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary,System.Exception)">
+            <summary>
+            เก็บข้อมูล Error Exception ใส่ไว้ใน ModelState
+            </summary>
+            <param name="modelState"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="M:erp_project.Configs.ExceptionConfig.ErrorMessage(Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary)">
+            <summary>
+            แสดงข้อความ Error ตัวแรกสุดของ ModelState
+            </summary>
+            <param name="modelState"></param>
+            <returns></returns>
+        </member>
+        <member name="T:erp_project.Configs.HelperConfig">
+            <summary>
+            สำหรับทำส่วนของ Document และอื่นๆเพื่อช่วยในการเชื่อมต่อกับ API
+            </summary>
+        </member>
+        <member name="P:erp_project.Configs.HelperConfig.ProxyPath">
+            <summary>
+            ตรวจสอบ Proxy path
+            </summary>
+        </member>
+        <member name="P:erp_project.Configs.HelperConfig.EnvironmentName">
+            <summary>
+            ตรวจสอบ Environment
+            </summary>
+        </member>
+        <member name="M:erp_project.Configs.HelperConfig.AddSwaggerGenHelper(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            ส่วนของการตั้งค่าของ Swagger
+            </summary>
+            <param name="services"></param>
+            <param name="Configuration"></param>
+        </member>
+        <member name="M:erp_project.Configs.HelperConfig.UseSwaggerHelper(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            ส่วนของ Generage Swagger json และ config server สำหรับทดสอบ swagger
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="T:erp_project.Configs.PolicyConfig">
+            <summary>
+            สำหรับกำหนดสิทธิ์ให้กับ User
+            </summary>
+        </member>
+        <member name="M:erp_project.Configs.PolicyConfig.RegisterPolicies(Microsoft.AspNetCore.Authorization.AuthorizationOptions)">
+            <summary>
+            สำหรับ เพิ่ม Role ให้กับ User
+            </summary>
+        </member>
+        <member name="M:erp_project.Configs.PolicyConfig.AddPolicy(System.String[])">
+            <summary>
+            สำหรับเพิ่มสิทธิ์ให้กับ User ในระบบ
+            </summary>
+            <param name="roles">สิทธิ์ของผู้ใช้งานใส่ได้เรื่อยๆ</param>
+            <returns></returns>
+        </member>
+        <member name="T:erp_project.Controllers.ERPControllerBase">
+            <summary>
+            ส่วนนี้เป็น Class กลางของ Controller ให้ Controller ทั้งหมด inherite (extends) ตัวนี้
+            </summary>
+        </member>
+        <member name="F:erp_project.Controllers.ERPControllerBase.HttpService">
+            <summary>
+            สำหรับยิงข้อมูลไปหา Server API อื่นๆเหมือน Front-End
+            </summary>
+        </member>
+        <member name="F:erp_project.Controllers.ERPControllerBase.Configuration">
+            <summary>
+            สำหรับดึงข้อมูลจากไฟล์ appsetting.json
+            </summary>
+        </member>
+        <member name="F:erp_project.Controllers.ERPControllerBase.JwtService">
+            <summary>
+            สำหรับการเข้ารหัสด้วย Json Web Token
+            </summary>
+        </member>
+        <member name="F:erp_project.Controllers.ERPControllerBase.hashService">
+            <summary>
+            สำหรับ Hash และ compare ข้อมูลต่างๆ
+            </summary>
+        </member>
+        <member name="M:erp_project.Controllers.ERPControllerBase.GetUserLogin``1">
+            <summary>
+            ดึงข้อมูลผู้ใช้งานที่เข้าสู่ระบบจาก HTTP Service 
+            จำเป็นจะต้องกำหนดค่า ApiUrls:AuthenURL ในไฟล์ appsettings.{environtment}.json ก่อน
+            </summary>
+        </member>
+        <member name="P:erp_project.Controllers.ERPControllerBase.UserAuthorization">
+            <summary>
+            ดึงข้อมูล Authorization ที่ Client ส่งมายืนยันตัวตน
+            </summary>
+        </member>
+        <member name="P:erp_project.Controllers.ERPControllerBase.UserLoginId">
+            <summary>
+            ไอดีผู้ใช้งานที่เข้าสู่ระบบ
+            </summary>
+        </member>
+        <member name="P:erp_project.Controllers.ERPControllerBase.UserLoginRole">
+            <summary>
+            สิทธิ์ผู้ใช้งานที่เข้าสู่ระบบ
+            </summary>
+        </member>
+        <member name="M:erp_project.Controllers.ERPControllerBase.OkAuthentication(System.String,System.String,System.String)">
+            <summary>
+            ส่งข้อมูลพร้อมกับ Token
+            </summary>
+        </member>
+        <member name="M:erp_project.Controllers.ERPControllerBase.Ok(System.String,System.Object)">
+            <summary>
+            Response ค่าที่สำเร็จออกไป (สนใจข้อความเป็นหลัก)
+            </summary>
+        </member>
+        <member name="M:erp_project.Controllers.ERPControllerBase.Ok(System.Object,System.String)">
+            <summary>
+            Response ค่าที่สำเร็จออกไป (สนใจข้อมูลเป็นหลัก)
+            </summary>
+        </member>
+        <member name="M:erp_project.Controllers.ERPControllerBase.BadRequest(System.String,System.Object)">
+            <summary>
+            Response ค่าที่ล้มเหลวออกไป (สนใจข้อความเป็นหลัก)
+            </summary>
+        </member>
+        <member name="M:erp_project.Controllers.ERPControllerBase.BadRequest(System.Object,System.String)">
+            <summary>
+            Response ค่าที่ล้มเหลวออกไป (สนใจข้อมูลเป็นหลัก)
+            </summary>
+        </member>
+        <member name="M:erp_project.Controllers.ERPControllerBase.ResponseResult(System.String,System.Object)">
+            <summary>
+            เปลี่ยนค่าใหม่ให้อยู่ในรูปแบบที่กำหนด
+            </summary>
+            <param name="message"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.AddProductAndService(erp_project.Libraries.Models.ProductAndService.m_productandservice_main_request)">
+            <summary>
+            เพิ่ม ProductAndService 
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.EditProductAndService(erp_project.Libraries.Models.ProductAndService.Edit_productandservice_main_request,System.Int32)">
+            <summary>
+            แก้ไข ProductAndService
+            </summary>
+            <param name="req"></param>
+            <param name="ProductsId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.JsonAddProduct(erp_project.Libraries.Models.ProductAndService.m_productandservice_main_request)">
+            <summary>
+            ตัวอย่างรูปแบบการส่งข้อมูลแบบ Json ใน AddProduct
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.MakeProduct(System.Collections.Generic.IEnumerable{erp_project.Middlewares.ProductAttributeModel})">
+            <summary>
+            ส่วนเอาไว้กระจาย ProductAttribute ออกมาเป็นส่วนๆ (ทวีคูณ Product attribute)
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.delProductAndService(System.Int32)">
+            <summary>
+            ลบ ProductAndService
+            </summary>
+            <param name="ProductID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.PriceSetting(erp_project.Libraries.Models.PriceSetting.m_priceSetting_request)">
+            <summary>
+            เพิ่ม PriceSetting
+            </summary>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.EditPrice(System.Int32,erp_project.Libraries.Models.PriceSetting.m_priceSetting_request_edti)">
+            <summary>
+            แก้ไข PriceSettingName
+            </summary>
+            <param name="GroupPriceId"></param>
+            <param name="req"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.EditaddonPrice(System.Int32,System.Collections.Generic.List{erp_project.Libraries.Models.PriceSetting.EditPrice})">
+            <summary>
+            แก้ไขราคาสินค้า
+            </summary>
+            <param name="req"></param>
+            <param name="GroupPriceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.DeltPrice(System.Int32)">
+            <summary>
+            ลบ PriceSettingName
+            </summary>
+            <param name="GroupPriceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.Unit(erp_project.Libraries.Models.Unit.m_unit_request)">
+            <summary>
+            สร้าง Unit 
+            </summary>
+            <param name="res"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.editUnit(System.Int32,erp_project.Libraries.Models.Unit.m_unit_edit_request)">
+            <summary>
+            แก้ไข Unit
+            </summary>
+            <param name="unitId"></param>
+            <param name="res"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceController.delUnit(System.Int32)">
+            <summary>
+            ลบ Unit
+            </summary>
+            <param name="unitId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceDashboardController.getproduct(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            ดึงข้อมูล ProductAndService
+            </summary>
+            <param name="domainId">ส่ง DomainId</param>
+            <param name="StatusId">ส่ง ProductStatusId</param>
+            <param name="Type">ส่ง ProdcutTypeId</param>
+            <param name="ProductCode">ส่ง ProductCode</param>
+            <param name="ProductName">ชื่อสินค้า</param>
+            <param name="Description">รายละเอียดสินค้า</param>
+            <param name="Unit">ส่ง UnitId</param>
+            <param name="Above">ราคามากกว่า</param>
+            <param name="Below">ราคาน้อยกว่า</param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceDashboardController.View_Attribute(System.Int32)">
+            <summary>
+            ดึงข้อมูล ProductsAndServices มาแสดงเพื่อแก้ไข
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceDashboardController.getPrice(System.Int32)">
+            <summary>
+            ดึงข้อมูล Price มาแสดง
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceDashboardController.getEditPrice(System.Int32)">
+            <summary>
+            ดึงข้อมูล Price มาแก้ไข
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceDashboardController.GetDataPrice(System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            ดึงข้อมูล ProductAddon ใน GroupPrice
+            </summary>
+            <param name="domainId"></param>
+            <param name="GroupPriceId"></param>
+            <param name="Type"></param>
+            <param name="ProductCode"></param>
+            <param name="ProductName"></param>
+            <param name="Attribute"></param>
+            <param name="Description"></param>
+            <param name="Unit"></param>
+            <param name="Above"></param>
+            <param name="Below"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceDashboardController.getunit(System.Int32)">
+            <summary>
+            ดึงข้อมูล Unit ทั้งหมดของ Domain นั้น
+            </summary>
+            <param name="domainId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Controllers.ProductAndServiceDashboardController.editunit(System.Int32)">
+            <summary>
+            ดึงข้อมูล Unit มาเพื่อแก้ไข
+            </summary>
+            <param name="unitId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:erp_project.Entities.DBConnect">
+            <summary>
+            สำหรับเชื่อมต่อและ Setting Database
+            </summary>
+            <summary>
+            สำหรับกำหนด Model ที่จะมาทำ DbSet ไว้ที่นี่
+            </summary>
+            <summary>
+            สำหรับกำหนด Model ที่จะมาทำ DbSet ไว้ที่นี่
+            </summary>
+        </member>
+        <member name="F:erp_project.Entities.DBConnect.Configuration">
+            <summary>
+            สำหรับค้นหาตัวแปรของ appsetting.json
+            </summary>
+        </member>
+        <member name="M:erp_project.Entities.DBConnect.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            ตั้งค่าเพิ่มเติมเมื่อเกิด Event การสร้าง Model
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:erp_project.Entities.DBConnect.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <summary>
+            ตั้งค่าการเชื่อมต่อ Connection String ของ Database
+            </summary>
+            <param name="optionsBuilder"></param>
+        </member>
+        <member name="T:erp_project.Libraries.Infrastructure.DependencyInjection">
+            <summary>
+            Injection ข้อมูลให้กับ Library, DbContext และ Service
+            </summary>
+        </member>
+        <member name="M:erp_project.Libraries.Infrastructure.DependencyInjection.RegisterLibraries(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            สำหรับ Inject ส่วนของ Library, DbContext และ Service
+            </summary>
+        </member>
+        <member name="P:erp_project.Libraries.Models.ProductAndService.m_uploadimage.OriginalName">
+            <summary>
+            ชื่อเดิมของรูปภาพ
+            </summary>
+        </member>
+        <member name="P:erp_project.Libraries.Models.ProductAndService.m_uploadimage.NewImageName">
+            <summary>
+            ชื่อใหม่ของรูปภาพ
+            </summary>
+        </member>
+        <member name="P:erp_project.Libraries.Models.ProductAndService.m_uploadimage.Path">
+            <summary>
+            ที่เก็บรูปภาพ
+            </summary>
+        </member>
+        <member name="P:erp_project.Libraries.Models.ProductAndService.m_uploadimage.fullPath">
+            <summary>
+            ที่เก็บรูปภาพพร้อมชื่อรูปภาพ
+            </summary>
+        </member>
+        <member name="P:erp_project.Libraries.Models.ProductAndService.m_uploadimage.sizes">
+            <summary>
+            ขนาดต่างๆ ของรูปภาพ
+            </summary>
+        </member>
+        <member name="T:erp_project.Middlewares.ExceptionMiddleware">
+            <summary>
+            ดักจับ Error ทั้งหมดของระบบ ก่อนจะ Response ออกไป
+            </summary>
+        </member>
+        <member name="M:erp_project.Middlewares.ExceptionMiddleware.IsDevelopment">
+            <summary>
+            ตรวจสอบ Environment ว่าเป็น Dev หรือไม่
+            </summary>
+        </member>
+        <member name="M:erp_project.Middlewares.ProductAddonExtesion.GetProductAddons(System.Collections.Generic.IEnumerable{erp_project.Middlewares.ProductAttributeModel},System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            ส่วนเอาไว้กระจาย ProductAttribute ออกมาเป็นส่วนๆ (ทวีคูณ Product attribute)
+            </summary>
+            <param name="productAttribute">Product attribute ต้องแปลงมาเป็น Object นี้ก่อน</param>
+            <param name="orderByIndex">เรียงข้อมูลจาก Index ที่</param>
+            <param name="isShowMeta"></param>
+            <param name="isShowCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Middlewares.ProductAddonExtesionToFE.GetProductAddons(System.Collections.Generic.IEnumerable{erp_project.Middlewares.ProductAttributeModel},System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            ส่วนเอาไว้กระจาย ProductAttribute ออกมาเป็นส่วนๆ (ทวีคูณ Product attribute)
+            </summary>
+            <param name="productAttribute">Product attribute ต้องแปลงมาเป็น Object นี้ก่อน</param>
+            <param name="orderByIndex">เรียงข้อมูลจาก Index ที่</param>
+            <param name="isShowMeta"></param>
+            <param name="isShowCode"></param>
+            <returns></returns>
+        </member>
+        <member name="T:erp_project.Services.Abstracts.IHashSerucityService">
+            <summary>
+            ส่วนของการเข้ารหัสข้อมูลที่ไม่สามารถถอดรหัสได้
+            </summary>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHashSerucityService.PasswordHash(System.String)">
+            <summary>
+            สำหรับเข้ารหัสผ่าน Password
+            </summary>
+            <param name="password">รหัสผ่านที่ต้องการมาเข้ารหัส</param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHashSerucityService.PasswordVerify(System.String,System.String)">
+            <summary>
+            สำหรับตรวจสอบ รหัสผ่านที่ยังไม่เข้ารหัสกับที่เข้ารหัสแล้วตรงกันหรือไม่
+            </summary>
+            <param name="password">รหัสผ่านที่ยังไม่เข้ารหัส</param>
+            <param name="passwordHash">รหัสผ่านที่เข้ารหัสแล้ว</param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHashSerucityService.GenerateGuid">
+            <summary>
+            สำหรับสร้างรหัสที่ไม่ซ้ำกัน
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:erp_project.Services.Abstracts.IHttpApiService">
+            <summary>
+            ส่วนของการส่งข้อมูลไปหา Server อื่นๆในรูปแบบ Resful API [GET, POST, PUT, DELETE]
+            </summary>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Authorization(System.String)">
+            <summary>
+            เพิ่ม Authrizeation Header เพื่อยืนยันตัวตน
+            </summary>
+            <param name="authorization">accessToken สำหรับยืนยัน</param>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Delete(System.String)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย Method DELETE
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <returns>ส่งค่ากลับมาเป็นสตริง</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Delete``1(System.String)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย Method DELETE
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <returns>ส่งค่ากลับมาเป็นคลาสที่ทำการ Mapping</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Get(System.String)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย Method GET
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <returns>ส่งค่ากลับมาเป็นสตริง</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Get``1(System.String)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย Method GET
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <returns>ส่งค่ากลับมาเป็นคลาสที่ทำการ Mapping</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Post(System.String,System.Object)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย Method POST
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <param name="data">Data ข้อมูลที่ต้องการส่ง</param>
+            <returns>ส่งค่ากลับมาเป็นสตริง</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Post``1(System.String,System.Object)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย Method POST
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <param name="data">Data ข้อมูลที่ต้องการส่ง</param>
+            <returns>ส่งค่ากลับมาเป็นคลาสที่ทำการ Mapping</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.PostFile(System.String,System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
+            <summary>
+            สำหรับส่ง File ด้วย Method POST
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <param name="files">File ข้อมูลที่ต้องการส่ง</param>
+            <returns>ส่งค่ากลับมาเป็นสตริง</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.PostFile``1(System.String,System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile})">
+            <summary>
+            สำหรับส่ง File ด้วย Method POST
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <param name="files">File ข้อมูลที่ต้องการส่ง</param>
+            <returns>ส่งค่ากลับมาเป็นคลาสที่ทำการ Mapping</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Put(System.String,System.Object)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย Method PUT
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <param name="data">Data ข้อมูลที่ต้องการส่ง</param>
+            <returns>ส่งค่ากลับมาเป็นสตริง</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Put``1(System.String,System.Object)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย Method PUT
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <param name="data">Data ข้อมูลที่ต้องการส่ง</param>
+            <returns>ส่งค่ากลับมาเป็นคลาสที่ทำการ Mapping</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Send(System.String,System.Net.Http.HttpMethod,System.Object,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            สำหรับส่งข้อมูลด้วย การใส่ Method เอง
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <param name="method">Method ที่ต้องการส่งข้อมูล</param>
+            <param name="data">Data ข้อมูลที่ต้องการส่งหากว่าเป็น Method POST หรือ PUT</param>
+            <param name="headers">Header สำหรับแนบข้อมูลบางอย่างไป</param>
+            <returns>ส่งค่ากลับมาเป็นสตริง</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Send``1(System.String,System.Net.Http.HttpMethod,System.Object,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            สำหรับส่งข้อมูลด้วย การใส่ Method เอง
+            </summary>
+            <param name="url">URL ที่ต้องการส่งข้อมูล</param>
+            <param name="method">Method ที่ต้องการส่งข้อมูล</param>
+            <param name="data">Data ข้อมูลที่ต้องการส่งหากว่าเป็น Method POST หรือ PUT</param>
+            <param name="headers">Header สำหรับแนบข้อมูลบางอย่างไป</param>
+            <returns>ส่งค่ากลับมาเป็นคลาสที่ทำการ Mapping</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Send(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย การกำหนดค่าเองทั้งหมด
+            </summary>
+            <param name="httpRequest">Http Request ค่าที่ต้องการส่ง</param>
+            <returns>ส่งค่ากลับมาเป็นสตริง</returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IHttpApiService.Send``1(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            สำหรับส่งข้อมูลด้วย การกำหนดค่าเองทั้งหมด
+            </summary>
+            <param name="httpRequest">Http Request ค่าที่ต้องการส่ง</param>
+            <returns>ส่งค่ากลับมาเป็นคลาสที่ทำการ Mapping</returns>
+        </member>
+        <member name="T:erp_project.Services.Abstracts.IJwtSecurityService">
+            <summary>
+            ส่วนของการเข้ารหัสในรูปแบบ Json Web Token ที่สามารถถอดรหัสได้
+            </summary>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IJwtSecurityService.GenerateJWTAuthentication(System.String,System.String)">
+            <summary>
+            สร้าง Token สำหรับยืนยันตัวตน
+            </summary>
+            <param name="id">รหัสผู้ใช้งาน</param>
+            <param name="role">สิทธิ์ของผู้ใช้งาน</param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IJwtSecurityService.JWTDecode``1(System.String)">
+            <summary>
+            สำหรับถอดรหัส Json Web Token
+            </summary>
+            <typeparam name="T">Class ที่ต้องการ Mapping</typeparam>
+            <param name="token">json web token ที่เข้ารหัสแล้ว</param>
+            <returns></returns>
+        </member>
+        <member name="M:erp_project.Services.Abstracts.IJwtSecurityService.JWTEncode``1(``0,System.Int32)">
+            <summary>
+            สำหรับเข้ารหัส Json Web Token
+            </summary>
+            <typeparam name="T">Class ที่ต้องการ Mapping</typeparam>
+            <param name="data">ข้อมูลที่ต้องการมาเข้ารหัส</param>
+            <param name="minute">เวลากำหนดอายุของ Token เป็นนาที</param>
+            <returns></returns>
+        </member>
+        <member name="T:erp_project.Services.Models.ERPHttpResponse`1">
+            <summary>
+            ส่วนนี้เป็นของ ERP ที่หากว่า Http Service ส่ง Request ไปหา service อื่นๆจะ Response ค่ามาตามนี้
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.ERPHttpResponse`1.message">
+            <summary>
+            ข้อความที่ Server ปลายทางส่งมา
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.ERPHttpResponse`1.data">
+            <summary>
+            ข้อมูลที่ Server ปลายทางส่งมา
+            </summary>
+        </member>
+        <member name="T:erp_project.Services.Models.HttpResponse`1">
+            <summary>
+            สำหรับ Return ค่า Http ออกมา
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:erp_project.Services.Models.HttpResponse`1.StatusCode">
+            <summary>
+            รหัสบ่งบอกว่าส่งข้อมูลสำเร็จหรือไม่
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.HttpResponse`1.ReasonPhrase">
+            <summary>
+            ข้อความบ่งบอกว่าส่งข้อมูลสำเร็จหรือไม่
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.HttpResponse`1.RequestMessage">
+            <summary>
+            ข้อมูลที่ส่งไปหา Server ปลายทาง
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.HttpResponse`1.Headers">
+            <summary>
+            ข้อมูล Header ที่ได้กลับมาจาก Server ปลายทาง
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.HttpResponse`1.ErrorMessage">
+            <summary>
+            ข้อความ Error หากเกิดข้อผิดพลาด (กรณีเกิด Error ที่ตัวระบบ)
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.HttpResponse`1.OutputMessage">
+            <summary>
+            ข้อมูลที่ Server ปลายทางส่งมา (กรณีเกิด Error ที่ตัวระบบ)
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.HttpResponse`1.Content">
+            <summary>
+            ข้อมูลที่ Server ปลายทางส่งมา
+            </summary>
+        </member>
+        <member name="T:erp_project.Services.Models.JwtPayload`1">
+            <summary>
+            ข้อมูล Json Web Token
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:erp_project.Services.Models.JwtPayload`1.Data">
+            <summary>
+            ข้อมูลที่เข้าหรือถอดรหัส
+            </summary>
+        </member>
+        <member name="P:erp_project.Services.Models.JwtPayload`1.Expire">
+            <summary>
+            เวลาหมดอายุ
+            </summary>
+        </member>
+        <member name="T:erp_project.Services.Security.HashSerucityService">
+            <summary>
+            ส่วนของการเข้ารหัสข้อมูลที่ไม่สามารถถอดรหัสได้
+            </summary>
+        </member>
+        <member name="T:erp_project.Services.Security.JwtSecurityService">
+            <summary>
+            ส่วนสำหรับใช้งาน JWT (Json Web Token)
+            </summary>
+        </member>
+        <member name="F:erp_project.Services.Security.JwtSecurityService.SECRET_KEY">
+            <summary>
+            กำหนด Security Key เพื่อเข้ารหัสกับ Json Web Token
+            </summary>
+        </member>
+        <member name="T:erp_project.Library.Concretes.HttpApiService">
+            <summary>
+            ส่วนของการส่งข้อมูลไปหา Server อื่นๆในรูปแบบ Resful API [GET, POST, PUT, DELETE]
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,41 @@
+﻿{
+   "ContextClassName": "Dev_MainContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": "Entities",
+   "OutputPath": "Entities\/Views",
+   "ProjectRootNamespace": "erp_project",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[GetDataAddon]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[GetDataAddonDetails]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[GetDataAddonGroupPrice]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[productAndService].[GetProductAndServices]"
+      }
+   ],
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseNodaTime": false,
+   "UseSpatial": false,
+   "UseStoredProcedures": false
+}
